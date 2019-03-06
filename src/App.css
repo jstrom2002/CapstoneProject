@@ -20,6 +20,11 @@
   margin-bottom:20px;
 }
 
+.App-body{
+  padding:10px;
+
+}
+
 .App-link {
   color: #61dafb;
 }

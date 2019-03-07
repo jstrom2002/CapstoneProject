@@ -4,40 +4,21 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes"/>
 
-    <!--     ///////////////////////////     -->
-
     <meta name="theme-color" content="#000000" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <title>CMPT 496 Capstone Project</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="index.css">
 
-    <!--     ///////////////////////////     -->
-
-    <!-- Load basic header -->
     </head>
-    <body onload="myFunction()" style="margin:0">
-    <script>
-      var myVar;
-
-      function myFunction() {
-        myVar = setTimeout(showPage, 1000);
-      }
-
-      function showPage() {
-        document.getElementById("loader").style.display = "none";
-        document.getElementById("myDiv").style.display = "block";
-      }
-    </script>
+    <body>
     <script src="//d3js.org/d3.v4.min.js"></script>
     <script src="../src/index.js"></script>
-    <div class="loader"></div>
     <div id="root"></div>
 
   <!--   ////////////////////////////////// -->
 
-    <!-- Load bar charts-->
-    <!-- see: https://alignedleft.com/tutorials/d3/making-a-bar-chart for more info -->
+    <!-- bar charts-->
     <script type="text/javascript">
 
       //Width and height
@@ -53,7 +34,7 @@
               width = w - margin.left - margin.right,
               height = h - margin.top - margin.bottom;
 
-      //Create  first SVG element
+      //Create first SVG element
       var svgOne = d3.select("body")
               .append("svg")
               .attr("width", width + margin.left + margin.right)
@@ -166,40 +147,31 @@
 
   <!--    /////////////////////////////////////   -->
 
-  <!-- load the d3.js library and draw line chart-->
+  <!--line chart-->
   <script src="//d3js.org/d3.v4.min.js"></script>
   <script type="text/javascript">
 
-    //Width and height
     var w = window.innerWidth - 200;
     var h = 400;
     var barPadding = 1;
 
-    // set the dimensions and margins of the graph
     var margin = {top: 60, right: 0, bottom: 0, left:  400},
             width = w - margin.left - margin.right,
             height = h - margin.top - margin.bottom;
 
-    // parse the date / time
     var parseTime = d3.timeParse("%d-%b-%y");
 
-    // set the ranges
     var x = d3.scaleTime().range([0, width-20]);
     var y = d3.scaleLinear().range([height, 0]);
 
-    // define the first line
     var valueline = d3.line()
             .x(function(d) { return x(d.date); })
             .y(function(d) { return y(d.close); });
 
-    // define the 2nd line
     var valueline2 = d3.line()
             .x(function(d) { return x(d.date); })
             .y(function(d) { return y(d.open); });
 
-    // append the svg obgect to the body of the page
-    // appends a 'group' element to 'svg'
-    // moves the 'group' element to the top left margin
     var svg = d3.select("body")
             .append("svg")
             .attr("width", width + margin.left + margin.right)
@@ -208,23 +180,19 @@
             .attr("transform",
                     "translate(" + margin.left + "," + margin.top + ")");
 
-    // Get the data
     d3.csv("data.csv", function(error, data) {
       if (error) throw error;
 
-      // format the data
       data.forEach(function(d) {
         d.date = parseTime(d.date);
         d.close = +d.close;
         d.open = +d.open;
       });
 
-      // Scale the range of the data
       x.domain(d3.extent(data, function(d) { return d.date; }));
       y.domain([0, d3.max(data, function(d) {
         return Math.max(d.close, d.open); })]);
 
-      // Add the valueline path.
       svg.append("path")
               .data([data])
               .attr("class", "line")
@@ -232,10 +200,9 @@
               .attr("stroke", "blue")
               .attr("stroke-linejoin", "round")
               .attr("stroke-linecap", "round")
-              .attr("stroke-width", 1.5)
+              .attr("stroke-width", 2.0)
               .attr("d", valueline);
 
-      // Add the valueline2 path.
       svg.append("path")
               .data([data])
               .attr("class", "line")
@@ -243,19 +210,16 @@
               .attr("stroke", "red")
               .attr("stroke-linejoin", "round")
               .attr("stroke-linecap", "round")
-              .attr("stroke-width", 1.5)
+              .attr("stroke-width", 2.0)
               .attr("d", valueline2);
 
-      // Add the X Axis
       svg.append("g")
               .attr("transform", "translate(0," + height + ")")
               .call(d3.axisBottom(x));
 
-      // Add the Y Axis
       svg.append("g")
               .call(d3.axisLeft(y));
 
-      // Add line chart title
       svg.append("text")
               .attr("x", (width / 2)-100)
               .attr("y", -20)
@@ -264,12 +228,10 @@
               .attr("font-size", "18px")
               .text("Accidents Men vs Women");
 
-      // Add the X Axis
       svg.append("g")
               .attr("transform", "translate(0," + height + ")")
               .call(d3.axisBottom(x));
 
-      // Add the Y Axis
       svg.append("g")
               .call(d3.axisLeft(y));
 

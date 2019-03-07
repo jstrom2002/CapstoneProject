@@ -10,73 +10,28 @@
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <title>CMPT 496 Capstone Project</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!--    //////////////////////////////   -->
-
-    <!--set up and render loading circle icon-->
-    <style>    /* Center the loader */
-      #loader {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        z-index: 1;
-        width: 150px;
-        height: 150px;
-        margin: -75px 0 0 -75px;
-        border: 16px solid #f3f3f3;
-        border-radius: 50%;
-        border-top: 16px solid #3498db;
-        width: 120px;
-        height: 120px;
-        -webkit-animation: spin 2s linear infinite;
-        animation: spin 2s linear infinite;
-      }
-
-      @-webkit-keyframes spin {
-        0% { -webkit-transform: rotate(0deg); }
-        100% { -webkit-transform: rotate(360deg); }
-      }
-
-      @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-      }
-
-      /* Add animation to "page content" */
-      .animate-bottom {
-        position: relative;
-        -webkit-animation-name: animatebottom;
-        -webkit-animation-duration: 1s;
-        animation-name: animatebottom;
-        animation-duration: 1s
-      }
-
-      @-webkit-keyframes animatebottom {
-        from { bottom:-100px; opacity:0 }
-        to { bottom:0px; opacity:1 }
-      }
-
-      @keyframes animatebottom {
-        from{ bottom:-100px; opacity:0 }
-        to{ bottom:0; opacity:1 }
-      }
-
-      #myDiv {
-        display: none;
-        text-align: center;
-      }
-    </style>
+    <link rel="stylesheet" href="index.css">
 
     <!--     ///////////////////////////     -->
 
-
     <!-- Load basic header -->
     </head>
-    <body onload="myFunction()" style="margin:0;">
+    <body onload="myFunction()" style="margin:0">
+    <script>
+      var myVar;
 
+      function myFunction() {
+        myVar = setTimeout(showPage, 1000);
+      }
+
+      function showPage() {
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("myDiv").style.display = "block";
+      }
+    </script>
     <script src="//d3js.org/d3.v4.min.js"></script>
     <script src="../src/index.js"></script>
-
+    <div class="loader"></div>
     <div id="root"></div>
 
   <!--   ////////////////////////////////// -->
@@ -86,8 +41,8 @@
     <script type="text/javascript">
 
       //Width and height
-      var w = window.innerWidth - 200;
-      var h = 150;
+      var w = window.innerWidth;
+      var h = 200;
       var barPadding = 1;
 
       var dataset = [ 5, 10, 13, 19, 21, 25, 22, 18, 15, 13,
@@ -103,6 +58,9 @@
               .append("svg")
               .attr("width", width + margin.left + margin.right)
               .attr("height", height + margin.top + margin.bottom)
+              .attr("transform", "scale(0.7)")
+              .attr("font-family", "sans-serif")
+              .attr("font-size", "25px")
               .append("g")
               .attr("transform",
                       "translate(" + margin.left + "," + margin.top + ")");
@@ -145,7 +103,7 @@
 
       svgOne.append("text")
               .attr("class", "title")
-              .attr("x", w/2 + 50)
+              .attr("x", w/2)
               .attr("y", 25)
               .attr("text-anchor", "middle")
               .text("Accidents by Weather Conditions");
@@ -155,6 +113,7 @@
               .append("svg")
               .attr("width", w)
               .attr("height", h)
+              .attr("transform", "scale(0.7)")
               .append("g")
               .attr("transform",
                       "translate(" + margin.left + "," + margin.top + ")");
@@ -197,8 +156,10 @@
 
       svgTwo.append("text")
               .attr("class", "title")
-              .attr("x", w/2 + 50)
+              .attr("x", w/2)
               .attr("y", 25)
+              .attr("font-family", "sans-serif")
+              .attr("font-size", "25px")
               .attr("text-anchor", "middle")
               .text("Accidents by Driver Age");
     </script>
@@ -215,7 +176,7 @@
     var barPadding = 1;
 
     // set the dimensions and margins of the graph
-    var margin = {top: 20, right: 0, bottom: 30, left: 100},
+    var margin = {top: 60, right: 0, bottom: 0, left:  400},
             width = w - margin.left - margin.right,
             height = h - margin.top - margin.bottom;
 
@@ -223,7 +184,7 @@
     var parseTime = d3.timeParse("%d-%b-%y");
 
     // set the ranges
-    var x = d3.scaleTime().range([0, width]);
+    var x = d3.scaleTime().range([0, width-20]);
     var y = d3.scaleLinear().range([height, 0]);
 
     // define the first line
@@ -242,7 +203,7 @@
     var svg = d3.select("body")
             .append("svg")
             .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
+            .attr("height", height + margin.top + margin.bottom+30)
             .append("g")
             .attr("transform",
                     "translate(" + margin.left + "," + margin.top + ")");
@@ -293,15 +254,15 @@
       // Add the Y Axis
       svg.append("g")
               .call(d3.axisLeft(y));
-      
+
       // Add line chart title
       svg.append("text")
-              .attr("x", (width / 2))
-              .attr("y", 0 - (margin.top / 2))
+              .attr("x", (width / 2)-100)
+              .attr("y", -20)
               .attr("text-anchor", "middle")
-              .style("font-size", "16px")
-              .style("text-decoration", "underline")
-              .text("Accidents by Men vs Women");
+              .attr("font-family", "sans-serif")
+              .attr("font-size", "18px")
+              .text("Accidents Men vs Women");
 
       // Add the X Axis
       svg.append("g")
@@ -316,21 +277,7 @@
     });
   </script>
 
-
   <!-- ////////////////////////////////  -->
-
-  <script>
-    var myVar;
-
-    function myFunction() {
-      myVar = setTimeout(showPage, 1000);
-    }
-
-    function showPage() {
-      document.getElementById("loader").style.display = "none";
-      document.getElementById("myDiv").style.display = "block";
-    }
-  </script>
 
 
   </body>

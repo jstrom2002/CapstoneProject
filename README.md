@@ -1,5 +1,5 @@
-###CMPT 496 Capstone Project
-###Jeffrey Strom
+### `CMPT 496 Capstone Project`
+### `Jeffrey Strom`
 
 
 

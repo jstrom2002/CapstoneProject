@@ -145,14 +145,12 @@
 
       svgOne.append("text")
               .attr("class", "title")
-              .attr("x", w/2)
+              .attr("x", w/2 + 50)
               .attr("y", 25)
               .attr("text-anchor", "middle")
               .text("Accidents by Weather Conditions");
 
-
-
-      //Create second SVG element
+      //Create second SVG bar graph
       var svgTwo = d3.select("body")
               .append("svg")
               .attr("width", w)
@@ -199,7 +197,7 @@
 
       svgTwo.append("text")
               .attr("class", "title")
-              .attr("x", w/2)
+              .attr("x", w/2 + 50)
               .attr("y", 25)
               .attr("text-anchor", "middle")
               .text("Accidents by Driver Age");
@@ -228,10 +226,15 @@
     var x = d3.scaleTime().range([0, width]);
     var y = d3.scaleLinear().range([height, 0]);
 
-    // define the line
+    // define the first line
     var valueline = d3.line()
             .x(function(d) { return x(d.date); })
             .y(function(d) { return y(d.close); });
+
+    // define the 2nd line
+    var valueline2 = d3.line()
+            .x(function(d) { return x(d.date); })
+            .y(function(d) { return y(d.open); });
 
     // append the svg obgect to the body of the page
     // appends a 'group' element to 'svg'
@@ -252,23 +255,45 @@
       data.forEach(function(d) {
         d.date = parseTime(d.date);
         d.close = +d.close;
+        d.open = +d.open;
       });
 
       // Scale the range of the data
       x.domain(d3.extent(data, function(d) { return d.date; }));
-      y.domain([0, d3.max(data, function(d) { return d.close; })]);
+      y.domain([0, d3.max(data, function(d) {
+        return Math.max(d.close, d.open); })]);
 
       // Add the valueline path.
       svg.append("path")
               .data([data])
               .attr("class", "line")
               .attr("fill", "none")
-              .attr("stroke", "steelblue")
+              .attr("stroke", "blue")
               .attr("stroke-linejoin", "round")
               .attr("stroke-linecap", "round")
               .attr("stroke-width", 1.5)
               .attr("d", valueline);
 
+      // Add the valueline2 path.
+      svg.append("path")
+              .data([data])
+              .attr("class", "line")
+              .attr("fill", "none")
+              .attr("stroke", "red")
+              .attr("stroke-linejoin", "round")
+              .attr("stroke-linecap", "round")
+              .attr("stroke-width", 1.5)
+              .attr("d", valueline2);
+
+      // Add the X Axis
+      svg.append("g")
+              .attr("transform", "translate(0," + height + ")")
+              .call(d3.axisBottom(x));
+
+      // Add the Y Axis
+      svg.append("g")
+              .call(d3.axisLeft(y));
+      
       // Add line chart title
       svg.append("text")
               .attr("x", (width / 2))

@@ -10,11 +10,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="index.css">
 
+    <!--      ////////////////////////////////////////////      -->
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+      $( function() {
+        $( "#slider-range" ).slider({
+          range: true,
+          min: 1999,
+          max: 2016,
+          values: [ 1999, 2016 ],
+          slide: function( event, ui ) {  $( "#year" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] );  }});
+        $( "#year" ).val( $( "#slider-range" ).slider( "values", 0 ) + " - " + $( "#slider-range" ).slider( "values", 1 ) ); } );
+    </script>
+
     </head>
     <body>
     <script src="//d3js.org/d3.v4.min.js"></script>
     <script src="../src/index.js"></script>
     <div id="root"></div>
+
+    <p>
+      <label for="year">Date range:</label>
+      <input type="text" id="year" readonly style="border:0; color:#f6931f; font-weight:bold;">
+    </p>
+    <div id="slider-range"></div>
+
 
   <!--   ////////////////////////////////// -->
 

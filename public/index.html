@@ -2,16 +2,19 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes"/>
+
+    <!--     ///////////////////////////     -->
+
     <meta name="theme-color" content="#000000" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <title>Capstone Project</title>
+    <title>CMPT 496 Capstone Project</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-      /* Center the loader */
+
+    <!--    //////////////////////////////   -->
+
+    <!--set up and render loading circle icon-->
+    <style>    /* Center the loader */
       #loader {
         position: absolute;
         left: 50%;
@@ -63,32 +66,160 @@
         text-align: center;
       }
     </style>
-  <div id="loader"></div>
 
-  </head>
-  <body onload="myFunction()" style="margin:0;">
-  <div class="loader"></div>
+    <!--     ///////////////////////////     -->
 
 
-  <noscript>You need to enable JavaScript to run this app.</noscript>
+    <!-- Load basic header -->
+    </head>
+    <body onload="myFunction()" style="margin:0;">
+
+    <script src="//d3js.org/d3.v4.min.js"></script>
     <script src="../src/index.js"></script>
+
     <div id="root"></div>
 
+  <!--   ////////////////////////////////// -->
+
+    <!-- Load bar charts-->
+    <!-- see: https://alignedleft.com/tutorials/d3/making-a-bar-chart for more info -->
+    <script type="text/javascript">
+
+      //Width and height
+      var w = window.innerWidth - 200;
+      var h = 150;
+      var barPadding = 1;
+
+      var dataset = [ 5, 10, 13, 19, 21, 25, 22, 18, 15, 13,
+        11, 12, 15, 20, 18, 17, 16, 18, 23, 25 ];
+
+      // set the dimensions and margins of the graph
+      var margin = {top: 20, right: 0, bottom: 30, left: 0},
+              width = w - margin.left - margin.right,
+              height = h - margin.top - margin.bottom;
+
+      //Create  first SVG element
+      var svgOne = d3.select("body")
+              .append("svg")
+              .attr("width", width + margin.left + margin.right)
+              .attr("height", height + margin.top + margin.bottom)
+              .append("g")
+              .attr("transform",
+                      "translate(" + margin.left + "," + margin.top + ")");
+
+      svgOne.selectAll("rect")
+              .data(dataset)
+              .enter()
+              .append("rect")
+              .attr("x", function(d, i) {
+                return i * (w / dataset.length);
+              })
+              .attr("y", function(d) {
+                return h - (d * 4);
+              })
+              .attr("width", w / dataset.length - barPadding)
+              .attr("height", function(d) {
+                return d * 4;
+              })
+              .attr("fill", function(d) {
+                return "rgb(0, 0, " + (d * 10) + ")";
+              });
+
+      svgOne.selectAll("text")
+              .data(dataset)
+              .enter()
+              .append("text")
+              .text(function(d) {
+                return d;
+              })
+              .attr("text-anchor", "middle")
+              .attr("x", function(d, i) {
+                return i * (w / dataset.length) + (w / dataset.length - barPadding) / 2;
+              })
+              .attr("y", function(d) {
+                return h - (d * 4) + 14;
+              })
+              .attr("font-family", "sans-serif")
+              .attr("font-size", "11px")
+              .attr("fill", "white");
+
+      svgOne.append("text")
+              .attr("class", "title")
+              .attr("x", w/2)
+              .attr("y", 25)
+              .attr("text-anchor", "middle")
+              .text("Accidents by Weather Conditions");
 
 
 
+      //Create second SVG element
+      var svgTwo = d3.select("body")
+              .append("svg")
+              .attr("width", w)
+              .attr("height", h)
+              .append("g")
+              .attr("transform",
+                      "translate(" + margin.left + "," + margin.top + ")");
 
+      svgTwo.selectAll("rect")
+              .data(dataset)
+              .enter()
+              .append("rect")
+              .attr("x", function(d, i) {
+                return i * (w / dataset.length);
+              })
+              .attr("y", function(d) {
+                return h - (d * 4);
+              })
+              .attr("width", w / dataset.length - barPadding)
+              .attr("height", function(d) {
+                return d * 4;
+              })
+              .attr("fill", function(d) {
+                return "rgb(0, 0, " + (d * 10) + ")";
+              });
 
+      svgTwo.selectAll("text")
+              .data(dataset)
+              .enter()
+              .append("text")
+              .text(function(d) {
+                return d;
+              })
+              .attr("text-anchor", "middle")
+              .attr("x", function(d, i) {
+                return i * (w / dataset.length) + (w / dataset.length - barPadding) / 2;
+              })
+              .attr("y", function(d) {
+                return h - (d * 4) + 14;
+              })
+              .attr("font-family", "sans-serif")
+              .attr("font-size", "11px")
+              .attr("fill", "white");
 
+      svgTwo.append("text")
+              .attr("class", "title")
+              .attr("x", w/2)
+              .attr("y", 25)
+              .attr("text-anchor", "middle")
+              .text("Accidents by Driver Age");
+    </script>
+
+  <!--    /////////////////////////////////////   -->
 
   <!-- load the d3.js library and draw line chart-->
-  <script src="https://d3js.org/d3.v4.min.js"></script>
-  <script>
+  <script src="//d3js.org/d3.v4.min.js"></script>
+  <script type="text/javascript">
+
+    //Width and height
+    var w = window.innerWidth - 200;
+    var h = 400;
+    var barPadding = 1;
 
     // set the dimensions and margins of the graph
-    var margin = {top: 20, right: 20, bottom: 30, left: 50},
-            width = 960 - margin.left - margin.right,
-            height = 500 - margin.top - margin.bottom;
+    var margin = {top: 20, right: 0, bottom: 30, left: 100},
+            width = w - margin.left - margin.right,
+            height = h - margin.top - margin.bottom;
 
     // parse the date / time
     var parseTime = d3.timeParse("%d-%b-%y");
@@ -105,7 +236,8 @@
     // append the svg obgect to the body of the page
     // appends a 'group' element to 'svg'
     // moves the 'group' element to the top left margin
-    var svg = d3.select("body").append("svg")
+    var svg = d3.select("body")
+            .append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
@@ -130,7 +262,21 @@
       svg.append("path")
               .data([data])
               .attr("class", "line")
+              .attr("fill", "none")
+              .attr("stroke", "steelblue")
+              .attr("stroke-linejoin", "round")
+              .attr("stroke-linecap", "round")
+              .attr("stroke-width", 1.5)
               .attr("d", valueline);
+
+      // Add line chart title
+      svg.append("text")
+              .attr("x", (width / 2))
+              .attr("y", 0 - (margin.top / 2))
+              .attr("text-anchor", "middle")
+              .style("font-size", "16px")
+              .style("text-decoration", "underline")
+              .text("Accidents by Men vs Women");
 
       // Add the X Axis
       svg.append("g")
@@ -141,12 +287,12 @@
       svg.append("g")
               .call(d3.axisLeft(y));
 
+
     });
   </script>
 
 
-
-
+  <!-- ////////////////////////////////  -->
 
   <script>
     var myVar;

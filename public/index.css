@@ -15,3 +15,9 @@ body {
     margin: 0;
     padding: 0;
 }
+
+#slider-range {
+    height:10px;
+    color:#fff;
+    width:300px;
+}

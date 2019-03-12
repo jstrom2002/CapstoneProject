@@ -3,7 +3,6 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes"/>
-
     <meta name="theme-color" content="#000000" />
     <link rel="manifest"  crossorigin="use-credentials" href="./manifest.json" />
     <title>CMPT 496 Capstone Project</title>
@@ -12,7 +11,6 @@
 
     <!--      ////////////////////////////////////////////      -->
 
-    //build date slider
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -23,6 +21,8 @@
           range: true,
           min: 1999,
           max: 2016,
+          width: 1,
+          height: 1,
           values: [ 1999, 2016 ],
           slide: function( event, ui ) {  $( "#year" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] );  }});
         $( "#year" ).val( $( "#slider-range" ).slider( "values", 0 ) + " - " + $( "#slider-range" ).slider( "values", 1 ) ); } );
@@ -31,15 +31,13 @@
     </head>
     <body>
     <script src="//d3js.org/d3.v4.min.js"></script>
-    <!--<script src="../src/index.js"></script>-->
-    <div><h2>CMPT 496 Capstone Project</h2></div>
     <div id="root"></div>
 
     <p>
       <label for="year">Date range:</label>
       <input type="text" id="year" readonly style="border:0; color:#f6931f; font-weight:bold;">
     </p>
-    <div id="slider-range"></div>
+    <div id="slider-range" width="200px"></div>
 
   <!--   ////////////////////////////////// -->
 
@@ -51,11 +49,40 @@
       var h = 250;
       var barPadding = 1;
 
+      // set the dimensions and margins of the graph
+      var margin = {top: 0, right: 0, bottom: 30, left: 0},
+              width = w - margin.left - margin.right+10,
+              height = h - margin.top - margin.bottom;
+
       //declare variables for data selection
       var dataset = [];
       var dataset2 = [];
       var ind = 0;
       var ind2 = 0;
+      var xscale, yscale, x_axis, y_axis, yAxisTranslate, xAxisTranslate;
+
+      //Create first SVG element
+      var svgOne = d3.select("body")
+              .append("svg")
+              .attr("width", width + margin.left + margin.right+50)
+              .attr("height", height + margin.top + margin.bottom+50)
+              .attr("transform", "scale(0.8)")
+              .attr("font-family", "sans-serif")
+              .attr("font-size", "25px")
+              .append("g")
+              .attr("transform",
+                      "translate(" + margin.left + "," + margin.top + ")");
+
+      //Create second SVG bar graph
+      var svgTwo = d3.select("body")
+              .append("svg")
+              .attr("width",  width + margin.left + margin.right+50)
+              .attr("height",height + margin.top + margin.bottom+50)
+              .attr("transform", "scale(0.8)")
+              .append("g")
+              .attr("transform",
+                      "translate(" + margin.left + "," + margin.top + ")");
+
       d3.csv("./weather-persons.csv", function(error, data) {
         if (error) throw error;
         dataset[0] = data[ind]["1999"];
@@ -77,25 +104,7 @@
         dataset[16] = data[ind]["2015"];
         dataset[17] = data[ind]["2016"];
         console.log(dataset);
-      });
 
-
-      // set the dimensions and margins of the graph
-      var margin = {top: 0, right: 0, bottom: 30, left: 0},
-              width = w - margin.left - margin.right+10,
-              height = h - margin.top - margin.bottom;
-
-      //Create first SVG element
-      var svgOne = d3.select("body")
-              .append("svg")
-              .attr("width", width + margin.left + margin.right+50)
-              .attr("height", height + margin.top + margin.bottom+50)
-              .attr("transform", "scale(0.7)")
-              .attr("font-family", "sans-serif")
-              .attr("font-size", "25px")
-              .append("g")
-              .attr("transform",
-                      "translate(" + margin.left + "," + margin.top + ")");
 
       svgOne.selectAll("rect")
               .data(dataset)
@@ -126,15 +135,34 @@
               .attr("text-anchor", "middle")
               .text("Accidents by Weather Conditions");
 
-      //Create second SVG bar graph
-      var svgTwo = d3.select("body")
-              .append("svg")
-              .attr("width",  width + margin.left + margin.right+50)
-              .attr("height",height + margin.top + margin.bottom+50)
-              .attr("transform", "scale(0.7)")
-              .append("g")
-              .attr("transform",
-                      "translate(" + margin.left + "," + margin.top + ")");
+        xscale = d3.scaleLinear()
+                .domain([0, d3.max(dataset)])
+                .range([0, width]);
+
+        yscale = d3.scaleLinear()
+                .domain([0, d3.max(dataset)])
+                .range([height, 0]);
+
+        x_axis = d3.axisBottom()
+                .scale(xscale);
+
+        y_axis = d3.axisLeft()
+                .scale(yscale);
+
+        yAxisTranslate = 30;
+
+        svgOne.append("g")
+                .attr("transform", "translate(35, " + yAxisTranslate +  ")")
+                .call(y_axis);
+
+        xAxisTranslate = height + 35;
+
+        svgOne.append("g")
+                .attr("transform", "translate(40, " + xAxisTranslate  +")")
+                .call(x_axis)
+
+      });
+
 
       d3.csv("./age-persons.csv", function(error, data) {
         if (error) throw error;
@@ -157,7 +185,6 @@
         dataset2[16] = data[ind2]["2015"];
         dataset2[17] = data[ind2]["2016"];
         console.log(dataset2);
-      });
 
       svgTwo.selectAll("rect")
               .data(dataset2)
@@ -170,7 +197,7 @@
               .attr("fill", function(d) { return "rgb(50, 50, " + (d * 8) + ")"; });
 
       svgTwo.selectAll("text")
-              .data(dataset)
+              .data(dataset2)
               .enter()
               .append("text")
               .text(function(d) { return d; })
@@ -190,40 +217,33 @@
               .attr("text-anchor", "middle")
               .text("Accidents by Driver Age");
 
-
-      var xscale = d3.scaleLinear()
-              .domain([0, d3.max(dataset)])
+      xscale = d3.scaleLinear()
+              .domain([0, d3.max(dataset2)])
               .range([0, width]);
 
-      var yscale = d3.scaleLinear()
-              .domain([0, d3.max(dataset)])
+      yscale = d3.scaleLinear()
+              .domain([0, d3.max(dataset2)])
               .range([height, 0]);
 
-      var x_axis = d3.axisBottom()
+      x_axis = d3.axisBottom()
               .scale(xscale);
 
-      var y_axis = d3.axisLeft()
+      y_axis = d3.axisLeft()
               .scale(yscale);
 
-      var yAxisTranslate = 30;
-
-      svgOne.append("g")
-              .attr("transform", "translate(35, " + yAxisTranslate +  ")")
-              .call(y_axis);
+      yAxisTranslate = 30;
 
       svgTwo.append("g")
               .attr("transform", "translate(35, " + yAxisTranslate +  ")")
               .call(y_axis);
 
-      var xAxisTranslate = height + 35;
-
-      svgOne.append("g")
-              .attr("transform", "translate(40, " + xAxisTranslate  +")")
-              .call(x_axis)
+      xAxisTranslate = height + 35;
 
       svgTwo.append("g")
               .attr("transform", "translate(40, " + xAxisTranslate  +")")
               .call(x_axis)
+
+      });
     </script>
 
   <!--    /////////////////////////////////////   -->
@@ -240,18 +260,9 @@
             width = w - margin.left - margin.right,
             height = h - margin.top - margin.bottom;
 
-    var x = d3.scaleTime().range([0, width-20]);
-    var y = d3.scaleLinear().range([height, 0]);
+    var x, y, valueline, valueline2, svg;
 
-    var valueline = d3.line()
-            .x(function(d) { return x(d.date); })
-            .y(function(d) { return y(d.close); });
-
-    var valueline2 = d3.line()
-            .x(function(d) { return x(d.date); })
-            .y(function(d) { return y(d.open); });
-
-    var svg = d3.select("body")
+    svg = d3.select("body")
             .append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom+30)
@@ -262,8 +273,37 @@
     var data = [];
     d3.csv("./sex-persons.csv", function(error, dt) {
       if (error) throw error;
-      data = dt[1];
+      data[0] = dt[ind2]["1999"];
+      data[1] = dt[ind2]["2000"];
+      data[2] = dt[ind2]["2001"];
+      data[3] = dt[ind2]["2002"];
+      data[4] = dt[ind2]["2003"];
+      data[5] = dt[ind2]["2004"];
+      data[6] = dt[ind2]["2005"];
+      data[7] = dt[ind2]["2006"];
+      data[8] = dt[ind2]["2007"];
+      data[9] = dt[ind2]["2008"];
+      data[10] = dt[ind2]["2009"];
+      data[11] = dt[ind2]["2010"];
+      data[12] = dt[ind2]["2011"];
+      data[13] = dt[ind2]["2012"];
+      data[14] = dt[ind2]["2013"];
+      data[15] = dt[ind2]["2014"];
+      data[16] = dt[ind2]["2015"];
+      data[17] = dt[ind2]["2016"];
       console.log(data);
+
+      x = d3.scaleTime().range([0, width-20]);
+      y = d3.scaleLinear().range([height, 0]);
+
+      valueline = d3.line()
+              .x(function(d) { return x(d.date); })
+              .y(function(d) { return y(d.close); });
+
+      valueline2 = d3.line()
+              .x(function(d) { return x(d.date); })
+              .y(function(d) { return y(d.open); });
+
 
       x.domain(d3.extent(data, function(d) { return d.date; }));
       y.domain([0, d3.max(data, function(d) {

@@ -1,0 +1,17 @@
+h2 {
+    color: #ffffff;
+    font-family: sans-serif;
+    padding-bottom: 8px;
+}
+
+body {
+    padding-left: 0px;
+    padding-right: 0px;
+    background: url('bg11.jpg')no-repeat center center fixed;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+   // -o-background-size: cover;
+    margin: 0;
+    padding: 0;
+}

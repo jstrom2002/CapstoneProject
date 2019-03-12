@@ -4,105 +4,95 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes"/>
 
-    <!--     ///////////////////////////     -->
-
     <meta name="theme-color" content="#000000" />
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="manifest"  crossorigin="use-credentials" href="./manifest.json" />
     <title>CMPT 496 Capstone Project</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="index.css">
 
-    <!--    //////////////////////////////   -->
+    <!--      ////////////////////////////////////////////      -->
 
-    <!--set up and render loading circle icon-->
-    <style>    /* Center the loader */
-      #loader {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        z-index: 1;
-        width: 150px;
-        height: 150px;
-        margin: -75px 0 0 -75px;
-        border: 16px solid #f3f3f3;
-        border-radius: 50%;
-        border-top: 16px solid #3498db;
-        width: 120px;
-        height: 120px;
-        -webkit-animation: spin 2s linear infinite;
-        animation: spin 2s linear infinite;
-      }
+    //build date slider
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+      $( function() {
+        $( "#slider-range" ).slider({
+          animate:true,
+          range: true,
+          min: 1999,
+          max: 2016,
+          values: [ 1999, 2016 ],
+          slide: function( event, ui ) {  $( "#year" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] );  }});
+        $( "#year" ).val( $( "#slider-range" ).slider( "values", 0 ) + " - " + $( "#slider-range" ).slider( "values", 1 ) ); } );
+    </script>
 
-      @-webkit-keyframes spin {
-        0% { -webkit-transform: rotate(0deg); }
-        100% { -webkit-transform: rotate(360deg); }
-      }
-
-      @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-      }
-
-      /* Add animation to "page content" */
-      .animate-bottom {
-        position: relative;
-        -webkit-animation-name: animatebottom;
-        -webkit-animation-duration: 1s;
-        animation-name: animatebottom;
-        animation-duration: 1s
-      }
-
-      @-webkit-keyframes animatebottom {
-        from { bottom:-100px; opacity:0 }
-        to { bottom:0px; opacity:1 }
-      }
-
-      @keyframes animatebottom {
-        from{ bottom:-100px; opacity:0 }
-        to{ bottom:0; opacity:1 }
-      }
-
-      #myDiv {
-        display: none;
-        text-align: center;
-      }
-    </style>
-
-    <!--     ///////////////////////////     -->
-
-
-    <!-- Load basic header -->
     </head>
-    <body onload="myFunction()" style="margin:0;">
-
+    <body>
     <script src="//d3js.org/d3.v4.min.js"></script>
-    <script src="../src/index.js"></script>
-
+    <!--<script src="../src/index.js"></script>-->
+    <div><h2>CMPT 496 Capstone Project</h2></div>
     <div id="root"></div>
+
+    <p>
+      <label for="year">Date range:</label>
+      <input type="text" id="year" readonly style="border:0; color:#f6931f; font-weight:bold;">
+    </p>
+    <div id="slider-range"></div>
 
   <!--   ////////////////////////////////// -->
 
-    <!-- Load bar charts-->
-    <!-- see: https://alignedleft.com/tutorials/d3/making-a-bar-chart for more info -->
+    <!-- bar charts-->
     <script type="text/javascript">
 
       //Width and height
-      var w = window.innerWidth - 200;
-      var h = 150;
+      var w = window.innerWidth;
+      var h = 250;
       var barPadding = 1;
 
-      var dataset = [ 5, 10, 13, 19, 21, 25, 22, 18, 15, 13,
-        11, 12, 15, 20, 18, 17, 16, 18, 23, 25 ];
+      //declare variables for data selection
+      var dataset = [];
+      var dataset2 = [];
+      var ind = 0;
+      var ind2 = 0;
+      d3.csv("./weather-persons.csv", function(error, data) {
+        if (error) throw error;
+        dataset[0] = data[ind]["1999"];
+        dataset[1] = data[ind]["2000"];
+        dataset[2] = data[ind]["2001"];
+        dataset[3] = data[ind]["2002"];
+        dataset[4] = data[ind]["2003"];
+        dataset[5] = data[ind]["2004"];
+        dataset[6] = data[ind]["2005"];
+        dataset[7] = data[ind]["2006"];
+        dataset[8] = data[ind]["2007"];
+        dataset[9] = data[ind]["2008"];
+        dataset[10] = data[ind]["2009"];
+        dataset[11] = data[ind]["2010"];
+        dataset[12] = data[ind]["2011"];
+        dataset[13] = data[ind]["2012"];
+        dataset[14] = data[ind]["2013"];
+        dataset[15] = data[ind]["2014"];
+        dataset[16] = data[ind]["2015"];
+        dataset[17] = data[ind]["2016"];
+        console.log(dataset);
+      });
+
 
       // set the dimensions and margins of the graph
-      var margin = {top: 20, right: 0, bottom: 30, left: 0},
-              width = w - margin.left - margin.right,
+      var margin = {top: 0, right: 0, bottom: 30, left: 0},
+              width = w - margin.left - margin.right+10,
               height = h - margin.top - margin.bottom;
 
-      //Create  first SVG element
+      //Create first SVG element
       var svgOne = d3.select("body")
               .append("svg")
-              .attr("width", width + margin.left + margin.right)
-              .attr("height", height + margin.top + margin.bottom)
+              .attr("width", width + margin.left + margin.right+50)
+              .attr("height", height + margin.top + margin.bottom+50)
+              .attr("transform", "scale(0.7)")
+              .attr("font-family", "sans-serif")
+              .attr("font-size", "25px")
               .append("g")
               .attr("transform",
                       "translate(" + margin.left + "," + margin.top + ")");
@@ -111,41 +101,27 @@
               .data(dataset)
               .enter()
               .append("rect")
-              .attr("x", function(d, i) {
-                return i * (w / dataset.length);
-              })
-              .attr("y", function(d) {
-                return h - (d * 4);
-              })
+              .attr("x", function(d, i) {return i * (w / dataset.length) + 40;})
+              .attr("y", function(d) {return h - (d * 8); })
               .attr("width", w / dataset.length - barPadding)
-              .attr("height", function(d) {
-                return d * 4;
-              })
-              .attr("fill", function(d) {
-                return "rgb(0, 0, " + (d * 10) + ")";
-              });
+              .attr("height", function(d) {return d * 8; })
+              .attr("fill", function(d) {return "rgb(50, 50, " + (d * 8) + ")"; });
 
       svgOne.selectAll("text")
               .data(dataset)
               .enter()
               .append("text")
-              .text(function(d) {
-                return d;
-              })
+              .text(function(d) {return d; })
               .attr("text-anchor", "middle")
-              .attr("x", function(d, i) {
-                return i * (w / dataset.length) + (w / dataset.length - barPadding) / 2;
-              })
-              .attr("y", function(d) {
-                return h - (d * 4) + 14;
-              })
+              .attr("x", function(d, i) {return (i * (w / dataset.length) + (w / dataset.length - barPadding) / 2) + 40; })
+              .attr("y", function(d) { return h - (d * 8) + 14; })
               .attr("font-family", "sans-serif")
               .attr("font-size", "11px")
               .attr("fill", "white");
 
       svgOne.append("text")
               .attr("class", "title")
-              .attr("x", w/2 + 50)
+              .attr("x", (w/2) -50)
               .attr("y", 25)
               .attr("text-anchor", "middle")
               .text("Accidents by Weather Conditions");
@@ -153,117 +129,146 @@
       //Create second SVG bar graph
       var svgTwo = d3.select("body")
               .append("svg")
-              .attr("width", w)
-              .attr("height", h)
+              .attr("width",  width + margin.left + margin.right+50)
+              .attr("height",height + margin.top + margin.bottom+50)
+              .attr("transform", "scale(0.7)")
               .append("g")
               .attr("transform",
                       "translate(" + margin.left + "," + margin.top + ")");
 
+      d3.csv("./age-persons.csv", function(error, data) {
+        if (error) throw error;
+        dataset2[0] = data[ind2]["1999"];
+        dataset2[1] = data[ind2]["2000"];
+        dataset2[2] = data[ind2]["2001"];
+        dataset2[3] = data[ind2]["2002"];
+        dataset2[4] = data[ind2]["2003"];
+        dataset2[5] = data[ind2]["2004"];
+        dataset2[6] = data[ind2]["2005"];
+        dataset2[7] = data[ind2]["2006"];
+        dataset2[8] = data[ind2]["2007"];
+        dataset2[9] = data[ind2]["2008"];
+        dataset2[10] = data[ind2]["2009"];
+        dataset2[11] = data[ind2]["2010"];
+        dataset2[12] = data[ind2]["2011"];
+        dataset2[13] = data[ind2]["2012"];
+        dataset2[14] = data[ind2]["2013"];
+        dataset2[15] = data[ind2]["2014"];
+        dataset2[16] = data[ind2]["2015"];
+        dataset2[17] = data[ind2]["2016"];
+        console.log(dataset2);
+      });
+
       svgTwo.selectAll("rect")
-              .data(dataset)
+              .data(dataset2)
               .enter()
               .append("rect")
-              .attr("x", function(d, i) {
-                return i * (w / dataset.length);
-              })
-              .attr("y", function(d) {
-                return h - (d * 4);
-              })
-              .attr("width", w / dataset.length - barPadding)
-              .attr("height", function(d) {
-                return d * 4;
-              })
-              .attr("fill", function(d) {
-                return "rgb(0, 0, " + (d * 10) + ")";
-              });
+              .attr("x", function(d, i) { return i * (w / dataset2.length) + 40;  })
+              .attr("y", function(d) { return h - (d * 8); })
+              .attr("width",  (w / dataset2.length - barPadding) )
+              .attr("height", function(d) {return d * 8; })
+              .attr("fill", function(d) { return "rgb(50, 50, " + (d * 8) + ")"; });
 
       svgTwo.selectAll("text")
               .data(dataset)
               .enter()
               .append("text")
-              .text(function(d) {
-                return d;
-              })
+              .text(function(d) { return d; })
               .attr("text-anchor", "middle")
-              .attr("x", function(d, i) {
-                return i * (w / dataset.length) + (w / dataset.length - barPadding) / 2;
-              })
-              .attr("y", function(d) {
-                return h - (d * 4) + 14;
-              })
+              .attr("x", function(d, i) {return (i * (w / dataset2.length) + (w / dataset2.length - barPadding) / 2) + 40; })
+              .attr("y", function(d) { return h - (d * 8) + 14; })
               .attr("font-family", "sans-serif")
               .attr("font-size", "11px")
               .attr("fill", "white");
 
       svgTwo.append("text")
               .attr("class", "title")
-              .attr("x", w/2 + 50)
+              .attr("x", (w/2)-50)
               .attr("y", 25)
+              .attr("font-family", "sans-serif")
+              .attr("font-size", "25px")
               .attr("text-anchor", "middle")
               .text("Accidents by Driver Age");
+
+
+      var xscale = d3.scaleLinear()
+              .domain([0, d3.max(dataset)])
+              .range([0, width]);
+
+      var yscale = d3.scaleLinear()
+              .domain([0, d3.max(dataset)])
+              .range([height, 0]);
+
+      var x_axis = d3.axisBottom()
+              .scale(xscale);
+
+      var y_axis = d3.axisLeft()
+              .scale(yscale);
+
+      var yAxisTranslate = 30;
+
+      svgOne.append("g")
+              .attr("transform", "translate(35, " + yAxisTranslate +  ")")
+              .call(y_axis);
+
+      svgTwo.append("g")
+              .attr("transform", "translate(35, " + yAxisTranslate +  ")")
+              .call(y_axis);
+
+      var xAxisTranslate = height + 35;
+
+      svgOne.append("g")
+              .attr("transform", "translate(40, " + xAxisTranslate  +")")
+              .call(x_axis)
+
+      svgTwo.append("g")
+              .attr("transform", "translate(40, " + xAxisTranslate  +")")
+              .call(x_axis)
     </script>
 
   <!--    /////////////////////////////////////   -->
 
-  <!-- load the d3.js library and draw line chart-->
+  <!--line chart-->
   <script src="//d3js.org/d3.v4.min.js"></script>
   <script type="text/javascript">
 
-    //Width and height
-    var w = window.innerWidth - 200;
+    var w = window.innerWidth - 250;
     var h = 400;
     var barPadding = 1;
 
-    // set the dimensions and margins of the graph
-    var margin = {top: 20, right: 0, bottom: 30, left: 100},
+    var margin = {top: 60, right: 0, bottom: 0, left:  400},
             width = w - margin.left - margin.right,
             height = h - margin.top - margin.bottom;
 
-    // parse the date / time
-    var parseTime = d3.timeParse("%d-%b-%y");
-
-    // set the ranges
-    var x = d3.scaleTime().range([0, width]);
+    var x = d3.scaleTime().range([0, width-20]);
     var y = d3.scaleLinear().range([height, 0]);
 
-    // define the first line
     var valueline = d3.line()
             .x(function(d) { return x(d.date); })
             .y(function(d) { return y(d.close); });
 
-    // define the 2nd line
     var valueline2 = d3.line()
             .x(function(d) { return x(d.date); })
             .y(function(d) { return y(d.open); });
 
-    // append the svg obgect to the body of the page
-    // appends a 'group' element to 'svg'
-    // moves the 'group' element to the top left margin
     var svg = d3.select("body")
             .append("svg")
             .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
+            .attr("height", height + margin.top + margin.bottom+30)
             .append("g")
             .attr("transform",
                     "translate(" + margin.left + "," + margin.top + ")");
 
-    // Get the data
-    d3.csv("data.csv", function(error, data) {
+    var data = [];
+    d3.csv("./sex-persons.csv", function(error, dt) {
       if (error) throw error;
+      data = dt[1];
+      console.log(data);
 
-      // format the data
-      data.forEach(function(d) {
-        d.date = parseTime(d.date);
-        d.close = +d.close;
-        d.open = +d.open;
-      });
-
-      // Scale the range of the data
       x.domain(d3.extent(data, function(d) { return d.date; }));
       y.domain([0, d3.max(data, function(d) {
         return Math.max(d.close, d.open); })]);
 
-      // Add the valueline path.
       svg.append("path")
               .data([data])
               .attr("class", "line")
@@ -271,10 +276,9 @@
               .attr("stroke", "blue")
               .attr("stroke-linejoin", "round")
               .attr("stroke-linecap", "round")
-              .attr("stroke-width", 1.5)
+              .attr("stroke-width", 2.0)
               .attr("d", valueline);
 
-      // Add the valueline2 path.
       svg.append("path")
               .data([data])
               .attr("class", "line")
@@ -282,33 +286,28 @@
               .attr("stroke", "red")
               .attr("stroke-linejoin", "round")
               .attr("stroke-linecap", "round")
-              .attr("stroke-width", 1.5)
+              .attr("stroke-width", 2.0)
               .attr("d", valueline2);
 
-      // Add the X Axis
       svg.append("g")
               .attr("transform", "translate(0," + height + ")")
               .call(d3.axisBottom(x));
 
-      // Add the Y Axis
       svg.append("g")
               .call(d3.axisLeft(y));
-      
-      // Add line chart title
-      svg.append("text")
-              .attr("x", (width / 2))
-              .attr("y", 0 - (margin.top / 2))
-              .attr("text-anchor", "middle")
-              .style("font-size", "16px")
-              .style("text-decoration", "underline")
-              .text("Accidents by Men vs Women");
 
-      // Add the X Axis
+      svg.append("text")
+              .attr("x", (width / 2)-100)
+              .attr("y", -20)
+              .attr("text-anchor", "middle")
+              .attr("font-family", "sans-serif")
+              .attr("font-size", "18px")
+              .text("Accidents Men vs Women");
+
       svg.append("g")
               .attr("transform", "translate(0," + height + ")")
               .call(d3.axisBottom(x));
 
-      // Add the Y Axis
       svg.append("g")
               .call(d3.axisLeft(y));
 
@@ -316,21 +315,7 @@
     });
   </script>
 
-
   <!-- ////////////////////////////////  -->
-
-  <script>
-    var myVar;
-
-    function myFunction() {
-      myVar = setTimeout(showPage, 1000);
-    }
-
-    function showPage() {
-      document.getElementById("loader").style.display = "none";
-      document.getElementById("myDiv").style.display = "block";
-    }
-  </script>
 
 
   </body>

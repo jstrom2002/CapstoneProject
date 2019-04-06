@@ -1,0 +1,51 @@
+body {
+    font-family: Helvetica, Arial, sans-serif;
+    color: darkslategrey;
+    width: 900px;
+    margin: 25px auto 25px auto;
+    padding: 30px;
+    background-color: white;
+}
+
+.axis {
+    stroke: lightgray;
+    stroke-width: 0.2;
+}
+
+.line {
+    fill: none;
+    stroke: deepskyblue;
+    stroke-width: 3;
+}
+
+.total-line {
+    fill: none;
+    stroke: darkorange;
+    stroke-width: 3;
+}
+
+.data-point {
+    fill: white;
+    stroke: darkorange;
+    stroke-width: 3;
+}
+
+.data-point-value {
+    font-size: 12px;
+    fill: darkorange;
+}
+
+.total-label {
+    font-size: 16px;
+    fill: darkorange;
+}
+
+.label {
+    font-size: 16px;
+    fill: deepskyblue;
+}
+
+.footer {
+    font-size: 10px;
+    fill: grey;
+}

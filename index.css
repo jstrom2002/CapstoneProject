@@ -1,0 +1,137 @@
+head{
+    text-align:center;
+    padding:0;
+    border: 10px black;
+}
+
+h2 {
+    color: #ffffff;
+    background-color: #000000;
+    background-size: cover;
+    width: 100%;
+    font-size: 40px;
+    font-family: sans-serif;
+    font-weight: bold;
+    text-align: center;
+    border: 2px black;
+    padding-bottom: 20px;
+    padding-top:20px;
+}
+body {
+    background: #ffffff;
+    background-size: cover;
+    width:100%;
+}
+.textIntroduction{
+    display:inline;
+    position: relative;
+}
+.introText{
+    font-family: Verdana, serif;
+    text-align: left;
+    padding-right: 30px;
+    font-size: 1vw;
+    color: #222222;
+    padding-left:70px;
+    top:0;
+}
+
+
+
+/* set left hand ui control style
+=================================*/
+input[type=submit] {
+    width: 6em;
+    display:flex;
+    height: 2em;
+    text-align:center;
+    font-size:12px;
+    font-family: Verdana, sans-serif
+}
+
+input[type=radio] {
+    font-family: Verdana, sans-serif
+}
+
+
+/* sub panel creation for ui controls */
+.uiFieldset {
+    display:inline;
+    width: 450px;
+    height: 600px;
+    text-align:left;
+    top:0;
+    float:left;
+    border: 1px solid silver;
+    padding-top: 9px;
+    border-radius: 4px;
+}
+legend {
+    display:inline;
+    position:relative;
+    top:130px;
+    width: 400px;
+    padding: 2px;
+}
+label {
+    display:inline;
+    width: 240px;
+    font-size:12px;
+    font-family: Verdana, sans-serif
+}
+#slider-range {
+    height:12px;
+    color:#fff;
+    width:200px;
+}
+
+#year{
+    height:26px;
+    color:#fff;
+    width:80px;
+    font-size:12px;
+    background:#deeded;
+}
+
+#slider-range2 {
+    height:12px;
+    color:#fff;
+    width:200px;
+}
+
+#year2{
+    height:22px;
+    color:#fff;
+    width:80px;
+    font-size:12px;
+    background:#deeded;
+}
+
+#slider-range3 {
+    height:12px;
+    color:#fff;
+    width:200px;
+}
+
+#year3{
+    height:22px;
+    color:#fff;
+    width:80px;
+    font-size:12px;
+    background:#deeded;
+}
+
+
+
+
+
+
+
+/* set charts and graph style
+=================================*/
+.charts{
+    float:left;
+    position:absolute;
+    display:inline;
+    padding-left:50px;
+}

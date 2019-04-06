@@ -1,0 +1,588 @@
+<!-- github website hosted at:  https://jstrom2002.github.io/CapstoneProject/ -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes"/>
+    <meta name="theme-color" content="#000000" />
+    <link rel="manifest"  crossorigin="use-credentials" href="./manifest.json" />
+    <title>CMPT 496 CAPSTONE PROJECT</title>
+    <link rel="stylesheet" href="index.css">
+    <h2>Canada National Collision Database Data Visualization</h2>
+    <!--      ////////////////////////////////////////////      -->
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script type="text/javascript">
+        var filenamestr = "weather-fatalities.csv";
+        var filenamestr2 = "age-fatalities.csv";
+        var filenamestr3 = "sex-fatalities.csv";
+
+        var data = [];
+        var data2 = [];
+        var maleData = [];
+        var femaleData = [];
+
+        var svg;
+        var svgOne;
+        var svgTwo;
+
+        var startValue = 2;
+        var endValue =  19;
+        var startValue2 = 2;
+        var endValue2 =  19;
+        var startValue3 = 2;
+        var endValue3 =  19;
+
+        var x3;
+        var y3;
+        var x4;
+        var y4;
+
+        function updateGraph1() {
+            if(document.getElementById("button1").checked){filenamestr = "weather-persons.csv";}
+            if(document.getElementById("button2").checked){filenamestr = "weather-injured.csv";}
+            if(document.getElementById("button3").checked){filenamestr = "weather-fatalities.csv";}
+            console.log(startValue,endValue);
+            data = [];
+
+            // set the dimensions and margins of the graph
+            var margin = {top: 20, right: 20, bottom: 40, left: 320},
+                width = 960 - margin.left - margin.right,
+                height = 500 - margin.top - margin.bottom;
+
+            // set the ranges
+            var x = d3.scaleBand()
+                .range([0, height])
+                .padding(0.1);
+            var y = d3.scaleLinear()
+                .range([width / 1, 0]);
+
+            // append the svg object to the body of the page
+            // append a 'group' element to 'svg'
+            // moves the 'group' element to the top left margin
+            if (svgOne == null) {
+                svgOne = d3.select("#charts").append("svg")
+                    .attr("width", (width / 1.0) + margin.left + margin.right)
+                    .attr("height", (height / 1.2) + margin.top + margin.bottom)
+                    .append("g")
+                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            }
+
+            // get the data
+            d3.request(filenamestr)
+                .mimeType("text/csv")
+                .get(function (response) {
+                    let rows = d3.csvParseRows(response.responseText);
+
+                    for (let i = 2; i < rows.length; i++) {
+                        let weather = rows[i][0];
+                        let number = 0;
+
+                        for (let j = startValue; j <= endValue; j++) {
+                            let number2 = rows[i][j];
+
+                            if (number2) {
+                                number2 = parseInt(number2);
+                            } else {
+                                number2 = 0;
+                            }
+                            number += number2;
+                        }
+                        number = Math.log2(number);
+                        data[i - 2] = {
+                            "weather": weather,
+                            "number": number
+                        };
+                    }
+                    data.sort(function (a, b) {
+                        return b.number - a.number
+                    });
+
+                    // Scale the range of the data in the domains
+                    x.domain(data.map(function (d) {
+                        return d.weather;
+                    }));
+                    y.domain([0, d3.max(data, function (d) {
+                        return d.number;
+                    })]);
+
+                    // append the rectangles for the bar chart
+                    svgOne.selectAll(".bar")
+                        .remove()
+                        .exit()
+                        .data(data)
+                        .enter().append("rect")
+                        .attr("class", "bar")
+                        .attr("x", function (d) {
+                            return x(d.weather) / 1.25;
+                        })
+                        .attr("width", x.bandwidth() / 1.25)
+                        .attr("y", function (d) {
+                            return y(d.number) - 30;
+                        })
+                        .attr("height", function (d) {
+                            return Math.abs(height - y(d.number));
+                        })
+                        .attr("fill", function (d) {
+                            if (d.weather === "Clear and sunny") {
+                                return "#0000aa";
+                            } else {
+                                return "#cccccc";
+                            }
+                        })
+                        .attr("transform", "translate(10, 0) scale(1 1) rotate(90 200 200)");
+
+                    // add the y Axis
+                    if(svgOne.select("g").empty()) {
+                        svgOne.append("g")
+                            .attr("transform", "rotate(0 0 0) scale(1 0.8) translate(0 0)")
+                            .attr("stroke", "lightgrey")
+                            .style("font", "15px verdana")
+                            .call(d3.axisLeft(x));
+
+                        svgOne.append("text")
+                            .attr("x", (height / 2))
+                            .attr("y", 0)
+                            .attr("text-anchor", "middle")
+                            .attr("font-family", "sans-serif")
+                            .attr("stroke", "lightgrey")
+                            .attr("font-size", "16px")
+                            .text("Accidents by Weather");
+                    }else{
+                        svgOne.select("g").remove().exit();
+                        svgOne.append("g")
+                            .attr("transform", "rotate(0 0 0) scale(1 0.8) translate(0 0)")
+                            .attr("stroke", "lightgrey")
+                            .style("font", "15px verdana")
+                            .call(d3.axisLeft(x));
+                    }
+
+                    // add the x Axis
+                    /*    svgOne.append("g")
+                            .attr("transform", "rotate(90 200 200)")
+                            .attr("transform", "scale(1, 1) translate(0 "+ height +")")
+                            .call(d3.axisBottom(y));    */
+
+
+                });
+
+        }
+
+        function updateGraph2() {
+            if(document.getElementById("button4").checked){filenamestr2 = "age-persons.csv";}
+            if(document.getElementById("button5").checked){filenamestr2 = "age-injured.csv";}
+            if(document.getElementById("button6").checked){filenamestr2 = "age-fatalities.csv";}
+            console.log(startValue2,endValue2);
+
+            data2 = [];
+
+            var margin2 = {top: 20, right: 50, bottom: 40, left: 320},
+                width2 = 960 - margin2.left - margin2.right,
+                height2 = 500 - margin2.top - margin2.bottom;
+
+            // set the ranges
+            var x2 = d3.scaleBand()
+                .range([0, height2/1.4])
+                .padding(0.1);
+            var y2 = d3.scaleLinear()
+                .range([width2/3.0, 0]);
+
+            // append the svg object to the body of the page
+            // append a 'group' element to 'svg'
+            // moves the 'group' element to the top left margin
+            if (svgTwo == null) {
+                svgTwo = d3.select("#charts").append("svg")
+                    .attr("width", (width2) + margin2.left + margin2.right)
+                    .attr("height", height2 + margin2.top + margin2.bottom)
+                    .append("g")
+                    .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
+            }
+
+            // get the data
+            d3.request(filenamestr2)
+                .mimeType("text/csv")
+                .get(function (response) {
+                    let rows2 = d3.csvParseRows(response.responseText);
+
+                    for (var i = 2; i < rows2.length; i++) {
+                        var age = rows2[i][0];
+                        let number = 0;
+
+                        for (var j = startValue2; j <= endValue2; j++) {
+                            var number2 = rows2[i][j];
+
+                            if (number2) {
+                                number2 = parseInt(number2);
+                            } else {
+                                number2 = 0;
+                            }
+                            number += number2;
+                        }
+
+                        data2[i - 2] = {
+                            "age": age,
+                            "number": number
+                        };
+                    }
+
+                    //normalize values
+                    let maxVal = d3.max(data2).number;
+                    for(let i=0; i<data2.length; ++i){
+                        data2[i].number=data2[i].number/maxVal;
+                    }
+
+                    console.log(data2);
+
+
+                    // Scale the range of the data in the domains
+                    x2.domain(data2.map(function (d) {
+                        return d.age;
+                    }));
+                    y2.domain([0, d3.max(data2, function (d) {
+                        return d.number;
+                    })]);
+
+                    // append the rectangles for the bar chart
+                    svgTwo.selectAll(".bar")
+                        .remove()
+                        .exit()
+                        .data(data2)
+                        .enter().append("rect")
+                        .attr("class", "bar")
+                        .attr("x", function (d) {
+                            return x2(d.age);
+                        })
+                        .attr("width", x2.bandwidth())
+                        .attr("y", function (d) {
+                            return y2(d.number) - 30;
+                        })
+                        .attr("height", function (d) {
+                            return (height2 - y2(d.number));
+                        })
+                        .attr("fill", function (d) {
+                            if (d.age === "15-19 years old" ||
+                                d.age === "20-24 years old" ||
+                                d.age === "25-29 years old"
+                            ) {
+                                return "#0000aa";
+                            } else {
+                                return "#cccccc";
+                            }
+                        })
+                        .attr("transform", "translate(10, 0) scale(1 1.4) rotate(90 200 200)");
+
+                    // add the y Axis
+                    if(svgTwo.select("g").empty()) {
+
+                        svgTwo.append("g")
+                            .attr("transform", "rotate(0 0 0) scale(1 1.4) translate(0 0)")
+                            .attr("stroke", "lightgrey")
+                            .style("font", "12px arial")
+                            .call(d3.axisLeft(x2));
+
+                        svgTwo.append("text")
+                            .attr("x", (height2 / 2))
+                            .attr("y", 0)
+                            .attr("text-anchor", "middle")
+                            .attr("stroke", "lightgrey")
+                            .attr("font-family", "sans-serif")
+                            .attr("font-size", "18px")
+                            .text("Accidents by Age");
+                    }else{
+                        svgTwo.select("g").remove();
+                        svgTwo.select(".point").remove();
+                        svgTwo.select(".text").remove();
+
+                        svgTwo.append("g")
+                            .attr("transform", "rotate(0 0 0) scale(1 1.4) translate(0 0)")
+                            .attr("stroke", "lightgrey")
+                            .style("font", "12px arial")
+                            .call(d3.axisLeft(x2));
+
+                        svgTwo.append("text")
+                            .attr("x", (height2 / 2))
+                            .attr("y", 0)
+                            .attr("text-anchor", "middle")
+                            .attr("stroke", "lightgrey")
+                            .attr("font-family", "sans-serif")
+                            .attr("font-size", "18px")
+                            .text("Accidents by Age");
+
+                    }
+
+                });
+        }
+
+
+        function updateGraph3() {
+            if(document.getElementById("button7").checked){filenamestr3 = "sex-persons.csv";}
+            if(document.getElementById("button8").checked){filenamestr3 = "sex-injured.csv";}
+            if(document.getElementById("button9").checked){filenamestr3 = "sex-fatalities.csv";}
+            console.log(startValue2,endValue2);
+
+            maleData = [];
+            femaleData = [];
+
+            // set the dimensions and margins of the graph
+            var margin3 = {top: 20, right: 30, bottom: 20, left: 140},
+                width3 = 1000 - margin3.left - margin3.right,
+                height3 = 500 - margin3.top - margin3.bottom;
+
+            if(svg==null) {
+                svg = d3.select("#charts")
+                    .append("svg")
+                    .attr("width", width3 + margin3.left + margin3.right)
+                    .attr("height", height3 + margin3.top + margin3.bottom)
+                    .append("g")
+                    .attr("transform", "translate(" + margin3.left + "," + margin3.top + ")");
+            }else{
+                d3.selectAll("path.line").remove();
+            }
+
+
+            d3.request(filenamestr3)
+                .mimeType("text/csv")
+                .get(function (response) {
+                    var rows3 = d3.csvParseRows(response.responseText);
+
+                    for (var i = 0; i < 1; i++) {
+                        for (var j = startValue3; j < endValue3; j++) {
+                            var Mnumber2 = rows3[3][j];
+                            var Fnumber2 = rows3[2][j];
+                            var year = rows3[0][j];
+
+                            if (Mnumber2) {
+                                Mnumber2 = parseInt(Mnumber2);
+                                Fnumber2 = parseInt(Fnumber2);
+                            } else {
+                                Mnumber2 = 0;
+                                Fnumber2 = 0;
+                            }
+                            if(year){
+                                //year = parseInt(year);
+                            }else{year = 0;}
+
+                            maleData[j - 2] = {
+                                "number": Mnumber2,
+                                "year": year
+                            };
+                            femaleData[j - 2] = {
+                                "number": Fnumber2,
+                                "year": year
+                            };
+                        }
+                    }
+
+                    // set the ranges
+                    x3 = d3.scaleLinear().range([0, width3]);
+                    y3 = d3.scaleLinear().range([height3, 0]);
+                    x4 = d3.scaleLinear().range([0, width3]);
+                    y4 = d3.scaleLinear().range([height3, 0]);
+                    x3.domain(d3.extent(maleData, function(d) { return d.year; }));
+                    y3.domain([d3.min(femaleData,function(d) { return d.number/1.1; }),
+                        d3.max(maleData, function(d) { return d.number*1.1; })]);
+                    x4.domain(d3.extent(femaleData, function(d) { return d.year; }));
+                    y4.domain([d3.min(femaleData,function(d) { return d.number/1.1; }),
+                        d3.max(maleData, function(d) { return d.number*1.1; })]);
+
+                    let valueline = d3.line()
+                        .curve(d3.curveBasis)
+                        .x(function(d) { return x3(d.year); })
+                        .y(function(d) { return y3(d.number); });
+
+                    svg.append("path")
+                        .data([maleData])
+                        .attr("class", "line")
+                        .attr("stroke", "blue")
+                        .attr("stroke-width", "3px")
+                        .attr("fill", "none")
+                        .attr("d", valueline);
+
+                    let valueline2 = d3.line()
+                        .curve(d3.curveBasis)
+                        .x(function(d) { return x4(d.year); })
+                        .y(function(d) { return y4(d.number); });
+
+                    svg.append("path")
+                        .data([femaleData])
+                        .attr("class", "line")
+                        .attr("stroke", "red")
+                        .attr("stroke-width", "3px")
+                        .attr("fill", "none")
+                        .attr("transform", "scale(1 1) translate(0,0)")
+                        .attr("d", valueline2);
+
+
+                    // Add the Axes
+                    if(svg.select("g").empty()) {
+                        svg.append("g")
+                            .attr("transform", "scale(1 1) translate(-10, 0)")
+                            .attr("stroke", "lightgrey")
+                            .style("font","12px arial")
+                            .call(d3.axisLeft(y3));
+                        svg.append("g")
+                            .attr("transform", "scale(1 1) translate(0," + height3 + ")")
+                            .attr("stroke", "lightgrey")
+                            .style("font","12px arial")
+                            .call(d3.axisBottom(x3)
+                                .ticks(17));
+                    }
+                    else{
+                        svg.selectAll('g').remove();
+                        svg.selectAll('.point').remove();
+
+                        svg.append("g")
+                            .attr("transform", "scale(1 1) translate(-10, 0)")
+                            .attr("stroke", "lightgrey")
+                            .style("font","16px arial")
+                            .call(d3.axisLeft(y3));
+
+                        svg.append("g")
+                            .attr("transform", "scale(1 1) translate(0," + height3 + ")")
+                            .attr("stroke", "lightgrey")
+                            .style("font","16px arial")
+                            .call(d3.axisBottom(x3).ticks(Math.abs(endValue3-startValue3)));
+                    }
+
+                    svg.append("text")
+                        .attr("x", (height3 ))
+                        .attr("y", 0)
+                        .attr("text-anchor", "middle")
+                        .attr("stroke", "lightgrey")
+                        .attr("font-family", "sans-serif")
+                        .attr("font-size", "18px")
+                        .text("Accidents by Sex");
+
+                });
+        }
+
+
+        $( function() {
+            $( "#slider-range" ).slider({
+                animate:true,
+                range: true,
+                min: 1999,
+                max: 2016,
+                width: 1,
+                height: 1,
+                values: [ 1999, 2016 ],
+                slide: function( event, ui ) {
+                    $( "#year" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+                    startValue = parseInt(ui.values[0])-1997;
+                    endValue = parseInt(ui.values[1])-1997;
+                }
+            });
+            $( "#year" ).val( $( "#slider-range" ).slider( "values", 0 ) + " - " + $( "#slider-range" ).slider( "values", 1 ) ); } );
+
+        $( function() {
+            $( "#slider-range2" ).slider({
+                animate:true,
+                range: true,
+                min: 1999,
+                max: 2016,
+                width: 1,
+                height: 1,
+                values: [ 1999, 2016 ],
+                slide: function( event, ui ) {
+                    $( "#year2" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+                    startValue2 = parseInt(ui.values[0])-1997;
+                    endValue2 = parseInt(ui.values[1])-1997;
+                }
+            });
+            $( "#year2" ).val( $( "#slider-range2" ).slider( "values", 0 ) + " - " + $( "#slider-range2" ).slider( "values", 1 ) ); } );
+
+        $( function() {
+            $( "#slider-range3" ).slider({
+                animate:true,
+                range: true,
+                min: 1999,
+                max: 2016,
+                width: 1,
+                height: 1,
+                values: [ 1999, 2016 ],
+                slide: function( event, ui ) {
+                    $( "#year3" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+                    startValue3 = parseInt(ui.values[0])-1997;
+                    endValue3 = parseInt(ui.values[1])-1997;
+                }
+            });
+            $( "#year3" ).val( $( "#slider-range3" ).slider( "values", 0 ) + " - " + $( "#slider-range3" ).slider( "values", 1 ) ); } );
+    </script>
+
+</head>
+<body>
+
+<div className="textIntroduction" id="textIntroduction">
+    <p class="introText" id="introText">
+        Who are the most at-risk drivers on the road? And what are the most dangerous conditions?.<br></br>
+        Most people would correctly guess it's new drivers, but would not guess that most collisions are committed by men age 15-29.<br></br>
+    </p>
+</div>
+
+
+<script src="//d3js.org/d3.v4.min.js"></script>
+<fieldset id="uiFieldset" class="uiFieldset">
+    <legend> <p>
+        <label for="year">Accidents by weather range:</label>
+        <input type="text" id="year" readonly style="border:0; color:#f6931f; font-weight:bold;">
+    </p>
+        <div id="slider-range" width="150px"></div><br>
+        <form>
+            <input type="radio" name="data type" value="number of persons" id="button1"><label id="buttonLabel1">
+            number of persons<br></label>
+            <input type="radio" name="data type" value="injured" id="button2" ><label id="buttonLabel2"> injured<br></label>
+            <input type="radio" name="data type" value="fatalities" id="button3" checked><label id="buttonLabel3"> fatalities<br></label>
+        </form></legend>
+
+    <legend>
+        <p>
+            <label for="year2">Accidents by age range:</label>
+            <input type="text" id="year2" readonly style="border:0; color:#f6931f; font-weight:bold;">
+        </p>
+        <div id="slider-range2" width="150px"></div><br>
+        <form>
+            <input type="radio" name="data type" value="number of persons" id="button4"><label id="buttonLabel4"> number of persons<br></label>
+            <input type="radio" name="data type" value="injured" id="button5" ><label id="buttonLabel5"> injured<br></label>
+            <input type="radio" name="data type" value="fatalities" id="button6" checked><label id="buttonLabel6"> fatalities<br></label>
+        </form></legend>
+
+    <legend>
+        <p>
+            <label for="year3">Accidents by gender range:</label>
+            <input type="text" id="year3" readonly style="border:0; color:#f6931f; font-weight:bold;">
+        </p>
+        <div id="slider-range3" width="150px"></div><br>
+        <form>
+            <input type="radio" name="data type" value="number of persons" id="button7"> <label id="buttonLabel7">number of persons<br></label>
+            <input type="radio" name="data type" value="injured" id="button8" ><label id="buttonLabel8"> injured<br></label>
+            <input type="radio" name="data type" value="fatalities" id="button9" checked ><label id="buttonLabel9"> fatalities<br><br></label>
+        </form></legend>
+
+    <script>
+        document.getElementById("button1").addEventListener("change", updateGraph1);
+        document.getElementById("button2").addEventListener("change", updateGraph1);
+        document.getElementById("button3").addEventListener("change", updateGraph1);
+        document.getElementById("button4").addEventListener("change", updateGraph2);
+        document.getElementById("button5").addEventListener("change", updateGraph2);
+        document.getElementById("button6").addEventListener("change", updateGraph2);
+        document.getElementById("button7").addEventListener("change", updateGraph3);
+        document.getElementById("button8").addEventListener("change", updateGraph3);
+        document.getElementById("button9").addEventListener("change", updateGraph3);
+    </script>
+</fieldset>
+
+<!--   ////////////////////////////////// -->
+<!-- bar charts-->
+<div class = "charts" id="charts">
+    <script src="//d3js.org/d3.v4.min.js"></script>
+    <script type="text/javascript">updateGraph1();</script><br></br><br></br>
+    <script type="text/javascript">updateGraph2();</script><br></br><br></br>
+    <script type="text/javascript">updateGraph3();</script><br></br><br></br>
+</div>
+<!-- ////////////////////////////////  -->
+</body>
+</html>

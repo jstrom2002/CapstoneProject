@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style> /* set the CSS */
+
+.bar { fill: steelblue; }
+
+</style>
+<body>
+
+<!-- load the d3.js library -->
+<div id="barGraphs" style="padding-top: 50px">
+    <script src="//d3js.org/d3.v4.min.js"></script>
+    <script>
+
+        var data = [];
+
+        // set the dimensions and margins of the graph
+        var margin = {top: 20, right: 20, bottom: 40, left: 190},
+            width = 960 - margin.left - margin.right,
+            height = 500 - margin.top - margin.bottom;
+
+        // set the ranges
+        var x = d3.scaleBand()
+            .range([0, height])
+            .padding(0.1);
+        var y = d3.scaleLinear()
+            .range([width, 0]);
+
+        // append the svg object to the body of the page
+        // append a 'group' element to 'svg'
+        // moves the 'group' element to the top left margin
+        var svgOne = d3.select("#barGraphs").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform","translate(" + margin.left + "," + margin.top + ")");
+
+        // get the data
+        d3.request("weather-persons.csv")
+            .mimeType("text/csv")
+            .get(function (response){
+                var rows = d3.csvParseRows(response.responseText);
+                for (var i = 2; i < rows.length; i++) {
+                    var weather = rows[i][0];
+                    var number = 0;
+
+                    for (var j = 2; j < rows[i].length; j++) {
+                        var number2 = rows[i][j];
+
+                        if (number2) {
+                            number2 = parseInt(number2);
+                        } else {
+                            number2 = 0;
+                        }
+                        number += number2;
+                        number = Math.log(number);
+
+                    }
+                    console.log(number);
+                    data[i - 2] = {
+                        "salesperson": weather,
+                        "sales": number
+                    };
+                }
+                console.log(data);
+
+                // Scale the range of the data in the domains
+                x.domain(data.map(function(d) { return d.salesperson; }));
+                y.domain([0, d3.max(data, function(d) { return d.sales; })]);
+
+                // append the rectangles for the bar chart
+                svgOne.selectAll(".bar")
+                    .data(data)
+                    .enter().append("rect")
+                    .attr("class", "bar")
+                    .attr("x", function(d) { return x(d.salesperson); })
+                    .attr("width", x.bandwidth())
+                    .attr("y", function(d) { return y(d.sales)-30; })
+                    .attr("height", function(d) { return height - y(d.sales); })
+                    .attr("fill", function(d) {return "rgb(50, 50, " + (y(d.sales) * 0.8) + ")"; })
+                    .attr("transform", "translate(10, 0) scale(1 1) rotate(90 200 200)");
+
+                // add the y Axis
+                svgOne.append("g")
+                    .attr("transform", "rotate(0 0 0) scale(1 1) translate(0 0)")
+                    .call(d3.axisLeft(x));
+
+                // add the x Axis
+                /*    svgOne.append("g")
+                        .attr("transform", "rotate(90 200 200)")
+                        .attr("transform", "scale(1, 1) translate(0 "+ height +")")
+                        .call(d3.axisBottom(y));    */
+
+                svgOne.append("text")
+                    .attr("x", (height / 2))
+                    .attr("y", 0)
+                    .attr("text-anchor", "middle")
+                    .attr("font-family", "sans-serif")
+                    .attr("font-size", "18px")
+                    .text("Accidents by Weather");
+            });
+
+
+        var margin2 = {top: 20, right: 20, bottom: 40, left: 190},
+            width2 = 1960 - margin.left - margin.right,
+            height2 = 500 - margin.top - margin.bottom;
+
+        var data2 = [];
+
+        // set the ranges
+        var x2 = d3.scaleBand()
+            .range([0, height2])
+            .padding(0.1);
+        var y2 = d3.scaleLinear()
+            .range([width2, 0]);
+
+        // append the svg object to the body of the page
+        // append a 'group' element to 'svg'
+        // moves the 'group' element to the top left margin
+        var svgTwo = d3.select("#barGraphs").append("svg")
+            .attr("width", width2 + margin2.left + margin2.right)
+            .attr("height", height2 + margin2.top + margin2.bottom)
+            .append("g")
+            .attr("transform","translate(" + margin2.left + "," + margin2.top + ")");
+
+        // get the data
+        d3.request("age-persons.csv")
+            .mimeType("text/csv")
+            .get(function (response){
+                var rows = d3.csvParseRows(response.responseText);
+                for (var i = 2; i < rows.length; i++) {
+                    var age = rows[i][0];
+                    var number = 0;
+
+                    for (var j = 2; j < rows[i].length; j++) {
+                        var number2 = rows[i][j];
+
+                        if (number2) {
+                            number2 = parseInt(number2);
+                        } else {
+                            number2 = 0;
+                        }
+                        number += number2;
+                        number = Math.log(number);
+                    }
+                    data2[i - 2] = {
+                        "salesperson": age,
+                        "sales": number
+                    };
+                }
+                console.log(data2);
+
+                // Scale the range of the data in the domains
+                x2.domain(data2.map(function(d) { return d.salesperson; }));
+                y2.domain([0, d3.max(data2, function(d) { return d.sales; })]);
+
+                // append the rectangles for the bar chart
+                svgTwo.selectAll(".bar")
+                    .data(data2)
+                    .enter().append("rect")
+                    .attr("class", "bar")
+                    .attr("x", function(d) { return x2(d.salesperson); })
+                    .attr("width", x2.bandwidth())
+                    .attr("y", function(d) { return y2(d.sales)-30; })
+                    .attr("height", function(d) { return height2 - y2(d.sales); })
+                    .attr("fill", function(d) {return "rgb(50, 50, " + (y2(d.sales) * 0.8) + ")"; })
+                    .attr("transform", "translate(10, 0) scale(1 1) rotate(90 200 200)");
+
+                // add the y Axis
+                svgTwo.append("g")
+                    .attr("transform", "rotate(0 0 0) scale(1 1) translate(0 0)")
+                    .call(d3.axisLeft(x2));
+
+                // add the x Axis
+                /*    svgOne.append("g")
+                        .attr("transform", "rotate(90 200 200)")
+                        .attr("transform", "scale(1, 1) translate(0 "+ height +")")
+                        .call(d3.axisBottom(y));    */
+
+                svgTwo.append("text")
+                    .attr("x", (height2 / 2))
+                    .attr("y", 0)
+                    .attr("text-anchor", "middle")
+                    .attr("font-family", "sans-serif")
+                    .attr("font-size", "18px")
+                    .text("Accidents by Age");
+
+            });
+
+    </script>
+</div>
+</body>

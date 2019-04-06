@@ -1,0 +1,121 @@
+head{
+    text-align:center;
+    padding:0px;
+    border: 10px black;
+}
+
+h2 {
+    color: #ffffff;
+    background-color: #000000;
+    background-size: cover;
+    width: 100%;
+    font-size: 40px;
+    font-family: sans-serif;
+    font-weight: bold;
+    text-align: center;
+    border: 2px black;
+    padding-bottom: 20px;
+    padding-top:20px;
+}
+
+body {
+    background: url('bg11.jpg')no-repeat center center fixed;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+// -o-background-size: cover;
+}
+
+
+/* set left hand ui control style
+=================================*/
+input[type=submit] {
+    width: 6em;
+    height: 2em;
+    text-align:center;
+    font-size:12px;
+    font-family: Verdana, sans-serif
+}
+
+input[type=radio] {
+    font-family: Verdana, sans-serif
+}
+
+label {
+    width: 150px;
+    font-size:12px;
+    font-family: Verdana, sans-serif
+}
+
+/* sub panel creation for ui controls */
+fieldset {
+    width: 7%;
+    height: 100%;
+    margin: 0px;
+    border: 1px solid silver;
+    padding: 3px;
+    border-radius: 4px;
+}
+legend {
+    width: 300px;
+    padding: 2px;
+}
+
+
+.column {
+    float: left;
+}
+.left {
+    width: 25%;
+}
+.right {
+    width: 75%;
+}
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+#slider-range {
+    height:12px;
+    color:#fff;
+    width:200px;
+}
+
+#year{
+    height:26px;
+    color:#fff;
+    width:80px;
+    font-size:12px;
+    background:#deeded;
+}
+
+#slider-range2 {
+    height:12px;
+    color:#fff;
+    width:200px;
+}
+
+#year2{
+    height:22px;
+    color:#fff;
+    width:80px;
+    font-size:12px;
+    background:#deeded;
+}
+
+#slider-range3 {
+    height:12px;
+    color:#fff;
+    width:200px;
+}
+
+#year3{
+    height:22px;
+    color:#fff;
+    width:80px;
+    font-size:12px;
+    background:#deeded;
+}
+

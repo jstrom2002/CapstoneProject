@@ -1,0 +1,144 @@
+head{
+    text-align:center;
+    padding:0px;
+    border: 10px black;
+}
+
+h2 {
+    color: #ffffff;
+    background-color: #000000;
+    background-size: cover;
+    width: 100%;
+    font-size: 90px;
+    font-family: sans-serif;
+    font-weight: bold;
+    text-align: center;
+    border: 10px black;
+    padding-bottom: 60px;
+    padding-top:60px;
+}
+
+body {
+    background: url('bg11.jpg')no-repeat center center fixed;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+   // -o-background-size: cover;
+}
+
+/* style bar chart */
+svg rect {
+    fill: blue;
+}
+
+svg text {
+    fill:black;
+    font: 40px sans-serif;
+    text-anchor: end;
+    text-align: center;
+    text-style: bold;
+
+}
+
+/* set left hand ui control style
+=================================*/
+input[type=submit] {
+    width: 6em;
+    height: 2em;
+    text-align:center;
+    font-size:24px;
+    font-family: Verdana, sans-serif
+}
+
+input[type=radio] {
+    font-family: Verdana, sans-serif
+}
+
+label {
+    width: 150px;
+    font-size:26px;
+    font-family: Verdana, sans-serif
+}
+
+/* sub panel creation for ui controls */
+fieldset {
+    width: 17%;
+    height: 100%;
+    margin: 0px;
+    border: 1px solid silver;
+    padding: 3px;
+    border-radius: 4px;
+}
+legend {
+    width: 550px;
+    padding: 2px;
+}
+
+
+.column {
+    float: left;
+}
+.left {
+    width: 25%;
+}
+.right {
+    width: 75%;
+}
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+#slider-range {
+    height:16px;
+    color:#fff;
+    width:200px;
+}
+
+#year{
+    height:26px;
+    color:#fff;
+    width:150px;
+    font-size:24px;
+    background:#deeded;
+}
+
+#slider-range2 {
+    height:16px;
+    color:#fff;
+    width:200px;
+}
+
+#year2{
+    height:22px;
+    color:#fff;
+    width:150px;
+    font-size:24px;
+    background:#deeded;
+}
+
+#slider-range3 {
+    height:16px;
+    color:#fff;
+    width:200px;
+}
+
+#year3{
+    height:22px;
+    color:#fff;
+    width:150px;
+    font-size:24px;
+    background:#deeded;
+}
+
+
+
+/* set graph style
+=================================*/
+.container {
+    float: right;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}

@@ -9,7 +9,7 @@
     <link rel="manifest"  crossorigin="use-credentials" href="./manifest.json" />
     <title>CMPT 496 CAPSTONE PROJECT</title>
     <link rel="stylesheet" href="index.css">
-    <h2>Edmonton Utility Data Visualization</h2>
+    <h2>Canada National Collision Database Data Visualization</h2>
     <!--      ////////////////////////////////////////////      -->
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -50,7 +50,7 @@
             data = [];
 
             // set the dimensions and margins of the graph
-            var margin = {top: 20, right: 20, bottom: 40, left: 320},
+            var margin = {top: 20, right: 20, bottom: 40, left: 420},
                 width = 960 - margin.left - margin.right,
                 height = 500 - margin.top - margin.bottom;
 
@@ -66,7 +66,7 @@
             // moves the 'group' element to the top left margin
             if (svgOne == null) {
                 svgOne = d3.select("#charts").append("svg")
-                    .attr("width", (width / 1.0) + margin.left + margin.right)
+                    .attr("width", width + margin.left + margin.right)
                     .attr("height", (height / 1.2) + margin.top + margin.bottom)
                     .append("g")
                     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -141,14 +141,23 @@
                         svgOne.append("g")
                             .attr("transform", "rotate(0 0 0) scale(1 0.8) translate(0 0)")
                             .attr("stroke", "lightgrey")
-                            .style("font", "16px arial")
+                            .style("font", "15px verdana")
                             .call(d3.axisLeft(x));
+
+                        svgOne.append("text")
+                            .attr("x", (height / 2))
+                            .attr("y", 0)
+                            .attr("text-anchor", "middle")
+                            .attr("font-family", "sans-serif")
+                            .attr("stroke", "lightgrey")
+                            .attr("font-size", "16px")
+                            .text("Accidents by Weather");
                     }else{
                         svgOne.select("g").remove().exit();
                         svgOne.append("g")
                             .attr("transform", "rotate(0 0 0) scale(1 0.8) translate(0 0)")
                             .attr("stroke", "lightgrey")
-                            .style("font", "16px arial")
+                            .style("font", "15px verdana")
                             .call(d3.axisLeft(x));
                     }
 
@@ -158,14 +167,7 @@
                             .attr("transform", "scale(1, 1) translate(0 "+ height +")")
                             .call(d3.axisBottom(y));    */
 
-                    svgOne.append("text")
-                        .attr("x", (height / 2))
-                        .attr("y", 0)
-                        .attr("text-anchor", "middle")
-                        .attr("font-family", "sans-serif")
-                        .attr("stroke", "lightgrey")
-                        .attr("font-size", "18px")
-                        .text("Accidents by Weather");
+
                 });
 
         }
@@ -178,7 +180,7 @@
 
             data2 = [];
 
-            var margin2 = {top: 20, right: 50, bottom: 40, left: 320},
+            var margin2 = {top: 20, right: 50, bottom: 40, left: 420},
                 width2 = 960 - margin2.left - margin2.right,
                 height2 = 500 - margin2.top - margin2.bottom;
 
@@ -293,6 +295,7 @@
                     }else{
                         svgTwo.select("g").remove();
                         svgTwo.select(".point").remove();
+                        svgTwo.select(".text").remove();
 
                         svgTwo.append("g")
                             .attr("transform", "rotate(0 0 0) scale(1 1.4) translate(0 0)")
@@ -308,6 +311,7 @@
                             .attr("font-family", "sans-serif")
                             .attr("font-size", "18px")
                             .text("Accidents by Age");
+
                     }
 
                 });
@@ -323,137 +327,137 @@
             maleData = [];
             femaleData = [];
 
-        // set the dimensions and margins of the graph
-        var margin3 = {top: 20, right: 30, bottom: 20, left: 140},
-            width3 = 1000 - margin3.left - margin3.right,
-            height3 = 500 - margin3.top - margin3.bottom;
+            // set the dimensions and margins of the graph
+            var margin3 = {top: 20, right: 30, bottom: 20, left: 240},
+                width3 = 1000 - margin3.left - margin3.right,
+                height3 = 500 - margin3.top - margin3.bottom;
 
-        if(svg==null) {
-            svg = d3.select("#charts")
-                .append("svg")
-                .attr("width", width3 + margin3.left + margin3.right)
-                .attr("height", height3 + margin3.top + margin3.bottom)
-                .append("g")
-                .attr("transform", "translate(" + margin3.left + "," + margin3.top + ")");
-        }else{
-            d3.selectAll("path.line").remove();
-        }
+            if(svg==null) {
+                svg = d3.select("#charts")
+                    .append("svg")
+                    .attr("width", width3 + margin3.left + margin3.right)
+                    .attr("height", height3 + margin3.top + margin3.bottom)
+                    .append("g")
+                    .attr("transform", "translate(" + margin3.left + "," + margin3.top + ")");
+            }else{
+                d3.selectAll("path.line").remove();
+            }
 
 
-        d3.request(filenamestr3)
-            .mimeType("text/csv")
-            .get(function (response) {
-                var rows3 = d3.csvParseRows(response.responseText);
+            d3.request(filenamestr3)
+                .mimeType("text/csv")
+                .get(function (response) {
+                    var rows3 = d3.csvParseRows(response.responseText);
 
-                for (var i = 0; i < 1; i++) {
-                    for (var j = startValue3; j < endValue3; j++) {
-                        var Mnumber2 = rows3[3][j];
-                        var Fnumber2 = rows3[2][j];
-                        var year = rows3[0][j];
+                    for (var i = 0; i < 1; i++) {
+                        for (var j = startValue3; j < endValue3; j++) {
+                            var Mnumber2 = rows3[3][j];
+                            var Fnumber2 = rows3[2][j];
+                            var year = rows3[0][j];
 
-                        if (Mnumber2) {
-                            Mnumber2 = parseInt(Mnumber2);
-                            Fnumber2 = parseInt(Fnumber2);
-                        } else {
-                            Mnumber2 = 0;
-                            Fnumber2 = 0;
+                            if (Mnumber2) {
+                                Mnumber2 = parseInt(Mnumber2);
+                                Fnumber2 = parseInt(Fnumber2);
+                            } else {
+                                Mnumber2 = 0;
+                                Fnumber2 = 0;
+                            }
+                            if(year){
+                                //year = parseInt(year);
+                            }else{year = 0;}
+
+                            maleData[j - 2] = {
+                                "number": Mnumber2,
+                                "year": year
+                            };
+                            femaleData[j - 2] = {
+                                "number": Fnumber2,
+                                "year": year
+                            };
                         }
-                        if(year){
-                            //year = parseInt(year);
-                        }else{year = 0;}
-
-                        maleData[j - 2] = {
-                            "number": Mnumber2,
-                            "year": year
-                        };
-                        femaleData[j - 2] = {
-                            "number": Fnumber2,
-                            "year": year
-                        };
                     }
-                }
 
-                // set the ranges
-                x3 = d3.scaleLinear().range([0, width3]);
-                y3 = d3.scaleLinear().range([height3, 0]);
-                x4 = d3.scaleLinear().range([0, width3]);
-                y4 = d3.scaleLinear().range([height3, 0]);
-                x3.domain(d3.extent(maleData, function(d) { return d.year; }));
-                y3.domain([d3.min(femaleData,function(d) { return d.number/1.1; }),
-                    d3.max(maleData, function(d) { return d.number*1.1; })]);
-                x4.domain(d3.extent(femaleData, function(d) { return d.year; }));
-                y4.domain([d3.min(femaleData,function(d) { return d.number/1.1; }),
-                    d3.max(maleData, function(d) { return d.number*1.1; })]);
+                    // set the ranges
+                    x3 = d3.scaleLinear().range([0, width3]);
+                    y3 = d3.scaleLinear().range([height3, 0]);
+                    x4 = d3.scaleLinear().range([0, width3]);
+                    y4 = d3.scaleLinear().range([height3, 0]);
+                    x3.domain(d3.extent(maleData, function(d) { return d.year; }));
+                    y3.domain([d3.min(femaleData,function(d) { return d.number/1.1; }),
+                        d3.max(maleData, function(d) { return d.number*1.1; })]);
+                    x4.domain(d3.extent(femaleData, function(d) { return d.year; }));
+                    y4.domain([d3.min(femaleData,function(d) { return d.number/1.1; }),
+                        d3.max(maleData, function(d) { return d.number*1.1; })]);
 
-                let valueline = d3.line()
-                    .curve(d3.curveBasis)
-                    .x(function(d) { return x3(d.year); })
-                    .y(function(d) { return y3(d.number); });
+                    let valueline = d3.line()
+                        .curve(d3.curveBasis)
+                        .x(function(d) { return x3(d.year); })
+                        .y(function(d) { return y3(d.number); });
 
-                svg.append("path")
-                    .data([maleData])
-                    .attr("class", "line")
-                    .attr("stroke", "blue")
-                    .attr("stroke-width", "3px")
-                    .attr("fill", "none")
-                    .attr("d", valueline);
+                    svg.append("path")
+                        .data([maleData])
+                        .attr("class", "line")
+                        .attr("stroke", "blue")
+                        .attr("stroke-width", "3px")
+                        .attr("fill", "none")
+                        .attr("d", valueline);
 
-                let valueline2 = d3.line()
-                    .curve(d3.curveBasis)
-                    .x(function(d) { return x4(d.year); })
-                    .y(function(d) { return y4(d.number); });
+                    let valueline2 = d3.line()
+                        .curve(d3.curveBasis)
+                        .x(function(d) { return x4(d.year); })
+                        .y(function(d) { return y4(d.number); });
 
-                svg.append("path")
-                    .data([femaleData])
-                    .attr("class", "line")
-                    .attr("stroke", "red")
-                    .attr("stroke-width", "3px")
-                    .attr("fill", "none")
-                    .attr("transform", "scale(1 1) translate(0,0)")
-                    .attr("d", valueline2);
+                    svg.append("path")
+                        .data([femaleData])
+                        .attr("class", "line")
+                        .attr("stroke", "red")
+                        .attr("stroke-width", "3px")
+                        .attr("fill", "none")
+                        .attr("transform", "scale(1 1) translate(0,0)")
+                        .attr("d", valueline2);
 
 
-                // Add the Axes
-                if(svg.select("g").empty()) {
-                    svg.append("g")
-                        .attr("transform", "scale(1 1) translate(-10, 0)")
+                    // Add the Axes
+                    if(svg.select("g").empty()) {
+                        svg.append("g")
+                            .attr("transform", "scale(1 1) translate(-10, 0)")
+                            .attr("stroke", "lightgrey")
+                            .style("font","12px arial")
+                            .call(d3.axisLeft(y3));
+                        svg.append("g")
+                            .attr("transform", "scale(1 1) translate(0," + height3 + ")")
+                            .attr("stroke", "lightgrey")
+                            .style("font","12px arial")
+                            .call(d3.axisBottom(x3)
+                                .ticks(17));
+                    }
+                    else{
+                        svg.selectAll('g').remove();
+                        svg.selectAll('.point').remove();
+
+                        svg.append("g")
+                            .attr("transform", "scale(1 1) translate(-10, 0)")
+                            .attr("stroke", "lightgrey")
+                            .style("font","16px arial")
+                            .call(d3.axisLeft(y3));
+
+                        svg.append("g")
+                            .attr("transform", "scale(1 1) translate(0," + height3 + ")")
+                            .attr("stroke", "lightgrey")
+                            .style("font","16px arial")
+                            .call(d3.axisBottom(x3).ticks(Math.abs(endValue3-startValue3)));
+                    }
+
+                    svg.append("text")
+                        .attr("x", (height3 ))
+                        .attr("y", 0)
+                        .attr("text-anchor", "middle")
                         .attr("stroke", "lightgrey")
-                        .style("font","12px arial")
-                        .call(d3.axisLeft(y3));
-                    svg.append("g")
-                        .attr("transform", "scale(1 1) translate(0," + height3 + ")")
-                        .attr("stroke", "lightgrey")
-                        .style("font","12px arial")
-                        .call(d3.axisBottom(x3)
-                            .ticks(17));
-                }
-                else{
-                    svg.selectAll('g').remove();
-                    svg.selectAll('.point').remove();
+                        .attr("font-family", "sans-serif")
+                        .attr("font-size", "18px")
+                        .text("Accidents by Sex");
 
-                    svg.append("g")
-                        .attr("transform", "scale(1 1) translate(-10, 0)")
-                        .attr("stroke", "lightgrey")
-                        .style("font","16px arial")
-                        .call(d3.axisLeft(y3));
-
-                    svg.append("g")
-                        .attr("transform", "scale(1 1) translate(0," + height3 + ")")
-                        .attr("stroke", "lightgrey")
-                        .style("font","16px arial")
-                        .call(d3.axisBottom(x3).ticks(Math.abs(endValue3-startValue3)));
-                }
-
-                svg.append("text")
-                    .attr("x", (height3 ))
-                    .attr("y", 0)
-                    .attr("text-anchor", "middle")
-                    .attr("stroke", "lightgrey")
-                    .attr("font-family", "sans-serif")
-                    .attr("font-size", "18px")
-                    .text("Accidents by Sex");
-
-            });
+                });
         }
 
 
@@ -522,44 +526,63 @@
 
 <script src="//d3js.org/d3.v4.min.js"></script>
 <fieldset id="uiFieldset" class="uiFieldset">
-            <legend> <p>
-                <label for="year">Accidents by weather range:</label>
-                <input type="text" id="year" readonly style="border:0; color:#f6931f; font-weight:bold;">
-            </p>
-                <div id="slider-range" width="150px"></div><br>
-                <form>
-                    <input type="radio" name="data type" value="number of persons" id="button1"><label id="buttonLabel1">
-                    number of persons<br></label>
-                    <input type="radio" name="data type" value="injured" id="button2" ><label id="buttonLabel2"> injured<br></label>
-                    <input type="radio" name="data type" value="fatalities" id="button3" checked><label id="buttonLabel3"> fatalities<br></label>
-                </form></legend>
+    <legend> <p>
+        <label for="year">Accidents by weather range:</label>
+        <input type="text" id="year" readonly style="border:0; color:#f6931f; font-weight:bold;">
+    </p>
+        <div id="slider-range" width="150px"></div><br>
+        <form>
+            <input type="radio" name="data type" value="number of persons" id="button1"><label id="buttonLabel1">
+            number of persons<br></label>
+            <input type="radio" name="data type" value="injured" id="button2" ><label id="buttonLabel2"> injured<br></label>
+            <input type="radio" name="data type" value="fatalities" id="button3" checked><label id="buttonLabel3"> fatalities<br></label>
+        </form></legend>
 
-            <legend>
-                <p>
-                    <label for="year2">Accidents by age range:</label>
-                    <input type="text" id="year2" readonly style="border:0; color:#f6931f; font-weight:bold;">
-                </p>
-                <div id="slider-range2" width="150px"></div><br>
-                <form>
-                    <input type="radio" name="data type" value="number of persons" id="button4"><label id="buttonLabel4"> number of persons<br></label>
-                    <input type="radio" name="data type" value="injured" id="button5" ><label id="buttonLabel5"> injured<br></label>
-                    <input type="radio" name="data type" value="fatalities" id="button6" checked><label id="buttonLabel6"> fatalities<br></label>
-                </form></legend>
+    <legend>
+        <p>
+            <label for="year2">Accidents by age range:</label>
+            <input type="text" id="year2" readonly style="border:0; color:#f6931f; font-weight:bold;">
+        </p>
+        <div id="slider-range2" width="150px"></div><br>
+        <form>
+            <input type="radio" name="data type" value="number of persons" id="button4"><label id="buttonLabel4"> number of persons<br></label>
+            <input type="radio" name="data type" value="injured" id="button5" ><label id="buttonLabel5"> injured<br></label>
+            <input type="radio" name="data type" value="fatalities" id="button6" checked><label id="buttonLabel6"> fatalities<br></label>
+        </form></legend>
 
-            <legend>
-                <p>
-                    <label for="year3">Accidents by gender range:</label>
-                    <input type="text" id="year3" readonly style="border:0; color:#f6931f; font-weight:bold;">
-                </p>
-                <div id="slider-range3" width="150px"></div><br>
-                <form>
-                    <input type="radio" name="data type" value="number of persons" id="button7"> <label id="buttonLabel7">number of persons<br></label>
-                    <input type="radio" name="data type" value="injured" id="button8" ><label id="buttonLabel8"> injured<br></label>
-                    <input type="radio" name="data type" value="fatalities" id="button9" checked ><label id="buttonLabel9"> fatalities<br><br></label>
-                </form></legend>
+    <legend>
+        <p>
+            <label for="year3">Accidents by gender range:</label>
+            <input type="text" id="year3" readonly style="border:0; color:#f6931f; font-weight:bold;">
+        </p>
+        <div id="slider-range3" width="150px"></div><br>
+        <form>
+            <input type="radio" name="data type" value="number of persons" id="button7"> <label id="buttonLabel7">number of persons<br></label>
+            <input type="radio" name="data type" value="injured" id="button8" ><label id="buttonLabel8"> injured<br></label>
+            <input type="radio" name="data type" value="fatalities" id="button9" checked ><label id="buttonLabel9"> fatalities<br><br></label>
+        </form></legend>
 
     <script>
         document.getElementById("button1").addEventListener("change", updateGraph1);
         document.getElementById("button2").addEventListener("change", updateGraph1);
         document.getElementById("button3").addEventListener("change", updateGraph1);
-        document
+        document.getElementById("button4").addEventListener("change", updateGraph2);
+        document.getElementById("button5").addEventListener("change", updateGraph2);
+        document.getElementById("button6").addEventListener("change", updateGraph2);
+        document.getElementById("button7").addEventListener("change", updateGraph3);
+        document.getElementById("button8").addEventListener("change", updateGraph3);
+        document.getElementById("button9").addEventListener("change", updateGraph3);
+    </script>
+</fieldset>
+
+<!--   ////////////////////////////////// -->
+<!-- bar charts-->
+<div class = "charts" id="charts">
+    <script src="//d3js.org/d3.v4.min.js"></script>
+    <script type="text/javascript">updateGraph1();</script><br></br><br></br>
+    <script type="text/javascript">updateGraph2();</script><br></br><br></br>
+    <script type="text/javascript">updateGraph3();</script><br></br><br></br>
+</div>
+<!-- ////////////////////////////////  -->
+</body>
+</html>

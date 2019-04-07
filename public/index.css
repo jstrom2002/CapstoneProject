@@ -2,6 +2,7 @@ head{
     text-align:center;
     padding:0;
     border: 10px black;
+    position:absolute;
 }
 
 h2 {
@@ -24,16 +25,18 @@ body {
 }
 .textIntroduction{
     display:inline;
-    position: relative;
+    position: absolute;
+
 }
 .introText{
     font-family: Verdana, serif;
+    position: absolute;
     text-align: left;
     padding-right: 30px;
-    font-size: 1vw;
-    color: #222222;
-    padding-left:70px;
-    top:0;
+    font-size: 14px;
+    color: #555555;
+    padding-left: 350px;
+    top: 180px;
 }
 
 

@@ -148,17 +148,28 @@
                             .attr("x", (height / 2))
                             .attr("y", 0)
                             .attr("text-anchor", "middle")
-                            .attr("font-family", "sans-serif")
                             .attr("stroke", "lightgrey")
-                            .attr("font-size", "13px")
+                            .attr("font-family", "sans-serif")
+                            .attr("font-size", "17px")
                             .text("Accidents by Weather");
                     }else{
-                        svgOne.select("g").remove().exit();
+                        svgOne.select("g").remove();
+                        svgOne.select(".text").remove();
+
                         svgOne.append("g")
                             .attr("transform", "rotate(0 0 0) scale(1 0.8) translate(0 0)")
                             .attr("stroke", "lightgrey")
                             .style("font", "13px verdana")
                             .call(d3.axisLeft(x));
+
+                        svgOne.append("text")
+                            .attr("x", (height / 2))
+                            .attr("y", 0)
+                            .attr("text-anchor", "middle")
+                            .attr("stroke", "lightgrey")
+                            .attr("font-family", "sans-serif")
+                            .attr("font-size", "17px")
+                            .text("Accidents by Weather");
                     }
 
                     // add the x Axis
@@ -558,7 +569,7 @@
 
 <div className="textIntroduction" id="textIntroduction">
     <pre class="introText" id="introText">
-        Who are the most at-risk drivers on the road? And what is the most dangerous weather to drive in?.
+        Who are the most at-risk drivers on the road? And what weather pattern do most collisions occur in?
 
         Most people would correctly guess it's new drivers, but would not guess that most collisions
         are committed by men age 15-29. Hardly anyone would guess that they are much more likely to

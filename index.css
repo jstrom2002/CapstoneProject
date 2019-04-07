@@ -140,3 +140,23 @@ label {
     padding-left:50px;
     top:430px;
 }
+
+.legend {
+    margin-right:20px;
+}
+
+.males { background: #1F77B4;}
+.females { background: #FF5151;}
+
+.sexes {
+    margin: 0 !important;
+}
+.key-dot {
+    display: inline-block;
+    top: -10px;
+    height: 10px;
+    margin-left: 55.5em;
+    margin-right: .5em;
+    width: 10px;
+}
+

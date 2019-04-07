@@ -132,7 +132,8 @@ label {
 =================================*/
 .charts{
     float:left;
-    position:relative;
+    position:absolute;
     display:inline;
     padding-left:50px;
+    top:400px;
 }

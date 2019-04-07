@@ -59,7 +59,7 @@
                 .range([0, height])
                 .padding(0.1);
             var y = d3.scaleLinear()
-                .range([width / 1, 0]);
+                .range([width, 0]);
 
             // append the svg object to the body of the page
             // append a 'group' element to 'svg'
@@ -141,7 +141,7 @@
                         svgOne.append("g")
                             .attr("transform", "rotate(0 0 0) scale(1 0.8) translate(0 0)")
                             .attr("stroke", "lightgrey")
-                            .style("font", "15px verdana")
+                            .style("font", "13px verdana")
                             .call(d3.axisLeft(x));
 
                         svgOne.append("text")
@@ -150,14 +150,14 @@
                             .attr("text-anchor", "middle")
                             .attr("font-family", "sans-serif")
                             .attr("stroke", "lightgrey")
-                            .attr("font-size", "16px")
+                            .attr("font-size", "13px")
                             .text("Accidents by Weather");
                     }else{
                         svgOne.select("g").remove().exit();
                         svgOne.append("g")
                             .attr("transform", "rotate(0 0 0) scale(1 0.8) translate(0 0)")
                             .attr("stroke", "lightgrey")
-                            .style("font", "15px verdana")
+                            .style("font", "13px verdana")
                             .call(d3.axisLeft(x));
                     }
 
@@ -465,13 +465,13 @@
                         svg.append("g")
                             .attr("transform", "scale(1 1) translate(-10, 0)")
                             .attr("stroke", "lightgrey")
-                            .style("font", "16px arial")
+                            .style("font", "12px arial")
                             .call(d3.axisLeft(y3));
 
                         svg.append("g")
                             .attr("transform", "scale(1 1) translate(0," + height3 + ")")
                             .attr("stroke", "lightgrey")
-                            .style("font", "16px arial")
+                            .style("font", "12px arial")
                             .call(d3.axisBottom(x3).ticks(Math.abs(endValue3 - startValue3)));
                     }
 

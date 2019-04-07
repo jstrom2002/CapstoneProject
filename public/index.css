@@ -57,8 +57,9 @@ input[type=radio] {
 /* sub panel creation for ui controls */
 .uiFieldset {
     display:inline;
+    position:relative;
     width: 250px;
-    height: 750px;
+    height: 800px;
     text-align:left;
     top:0;
     float:left;

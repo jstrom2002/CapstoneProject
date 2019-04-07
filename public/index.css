@@ -57,8 +57,8 @@ input[type=radio] {
 /* sub panel creation for ui controls */
 .uiFieldset {
     display:inline;
-    width: 450px;
-    height: 600px;
+    width: 250px;
+    height: 750px;
     text-align:left;
     top:0;
     float:left;
@@ -70,7 +70,7 @@ legend {
     display:inline;
     position:relative;
     top:130px;
-    width: 400px;
+    width: 180px;
     padding: 2px;
 }
 label {
@@ -131,7 +131,7 @@ label {
 =================================*/
 .charts{
     float:left;
-    position:absolute;
+    position:relative;
     display:inline;
     padding-left:50px;
 }

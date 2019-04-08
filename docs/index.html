@@ -320,16 +320,9 @@
 
 
         function updateGraph3() {
-            if (document.getElementById("button7").checked) {
-                filenamestr3 = "sex-persons.csv";
-            }
-            if (document.getElementById("button8").checked) {
-                filenamestr3 = "sex-injured.csv";
-            }
-            if (document.getElementById("button9").checked) {
-                filenamestr3 = "sex-fatalities.csv";
-            }
-            console.log(startValue2, endValue2);
+            if (document.getElementById("button7").checked) {filenamestr3 = "sex-persons.csv";}
+            if (document.getElementById("button8").checked) {filenamestr3 = "sex-injured.csv";}
+            if (document.getElementById("button9").checked) {filenamestr3 = "sex-fatalities.csv";}
 
             maleData = [];
             femaleData = [];
@@ -350,14 +343,14 @@
                 d3.selectAll("path.line").remove();
             }
 
+            console.log(startValue3, endValue3);
 
             d3.request(filenamestr3)
                 .mimeType("text/csv")
                 .get(function (response) {
                     var rows3 = d3.csvParseRows(response.responseText);
 
-                    for (var i = 0; i < 1; i++) {
-                        for (var j = startValue3; j < endValue3; j++) {
+                    for (var j = startValue3; j < endValue3; j++) {
                             var Mnumber2 = rows3[3][j];
                             var Fnumber2 = rows3[2][j];
                             var year = rows3[0][j];
@@ -369,21 +362,15 @@
                                 Mnumber2 = 0;
                                 Fnumber2 = 0;
                             }
-                            if (year) {
-                                //year = parseInt(year);
-                            } else {
-                                year = 0;
-                            }
 
-                            maleData[j - 2] = {
+                            maleData[j - startValue3] = {
                                 "number": Mnumber2,
                                 "year": year
                             };
-                            femaleData[j - 2] = {
+                            femaleData[j - startValue3] = {
                                 "number": Fnumber2,
                                 "year": year
                             };
-                        }
                     }
 
                     // set the ranges
@@ -392,6 +379,10 @@
                     x4 = d3.scaleLinear().range([0, width3]);
                     y4 = d3.scaleLinear().range([height3, 0]);
                     x3.domain(d3.extent(maleData, function (d) {
+                        if(d===undefined){
+                            console.log(maleData);
+                            console.log(femaleData);
+                        }
                         return d.year;
                     }));
                     y3.domain([d3.min(femaleData, function (d) {
@@ -467,6 +458,7 @@
                     } else {
                         svg.selectAll('g').remove();
                         svg.selectAll('.point').remove();
+                        svg.selectAll('.ticks').remove();
 
                         svg.append("g")
                             .attr("transform", "scale(1 1) translate(-10, 0)")

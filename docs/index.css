@@ -6,6 +6,8 @@ head{
 }
 
 h2 {
+    position:absolute;
+    display:block;
     color: #ffffff;
     background-color: #000000;
     background-size: cover;
@@ -64,7 +66,7 @@ input[type=radio] {
     width: 250px;
     height: 800px;
     text-align:left;
-    top:0;
+    top:100px;
     float:left;
     border: 1px solid silver;
     padding-top: 9px;
@@ -155,7 +157,7 @@ label {
     display: inline-block;
     top: -10px;
     height: 10px;
-    margin-left: 55.5em;
+    margin-left: 50.5em;
     margin-right: .5em;
     width: 10px;
 }

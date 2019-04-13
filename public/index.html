@@ -378,10 +378,6 @@
                     x4 = d3.scaleLinear().range([0, width3]);
                     y4 = d3.scaleLinear().range([height3, 0]);
                     x3.domain(d3.extent(maleData, function (d) {
-                        if(d===undefined){
-                            console.log(maleData);
-                            console.log(femaleData);
-                        }
                         return d.year;
                     }));
                     y3.domain([d3.min(femaleData, function (d) {
@@ -557,12 +553,12 @@
     <pre class="introText" id="introText">
         Who are the most at-risk drivers on the road? And in what weather pattern do most collisions occur?
 
-        Most people would correctly guess it's new drivers, but might not guess that more collisions
-        are committed by males age 15-29 than any other group. And hardly anyone would guess that
-        collisions are much more likely to occur in clear and sunny weather than any other weather pattern.
+        Most people would correctly guess it's young men, but might not guess that collisions involving
+        males age 15-29 are rapidly declining over time. And hardly anyone would guess that collisions are
+        much more likely to occur in clear and sunny weather than any other weather pattern.
 
-        The following data that is presented is collected from the Canadian National Collision
-        Database (NCDB) and collects 17 years of traffic data from across the country.
+        The following data that is presented is collected from the Canadian National Collision Database
+        (<a href="http://www.tc.gc.ca/VehicleCollisions">http://www.tc.gc.ca/VehicleCollisions</a>) and collects 17 years of traffic data from across the country.
     </pre>
 </div>
 
